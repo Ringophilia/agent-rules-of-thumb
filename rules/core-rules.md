@@ -15,4 +15,4 @@
 - **Scripts need checkpoints**: against changing systems (GUIs, games, installers, web flows), check preconditions before key steps and stop on surprises. (no-blind-script)
 - **Encoding first**: before writing non-ASCII text, pick the encoding for the reader: .ps1 for PowerShell 5.1 is pure ASCII or UTF-8 with BOM; .bat, .sh and JSON have no BOM. (encoding-first)
 - **Style fits the job**: tools stay restrained and clear, entertainment can go bold; no default glassmorphism, purple-blue gradients, neon or emoji icons. (style-fits-the-job)
-- **Design in the user's order**: actions next to their object, common tasks one step away, no extra confirmations or unrequested features; walk the main task and count steps before calling UI done. (think-like-the-user)
+- **Design in the user's order**: actions next to their object, common tasks one step away, no extra confirmations or unrequested features, no developer-only info (tech stack, hook counts, IDs, stack traces) on screen; walk the main task and count steps before calling UI done. (think-like-the-user)

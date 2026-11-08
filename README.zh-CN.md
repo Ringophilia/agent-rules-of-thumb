@@ -46,7 +46,7 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 习惯性地用最熟悉、而不是最合适的工具 | 慢操作、批量操作、跨机操作之前 |
 | 🙋 [**maybe-it-was-the-user**](skills/maybe-it-was-the-user/SKILL.md) | 用户关掉了窗口、改了文件，却被当成程序出错，开始排错或反复重启 | 程序、窗口、文件意外变化，准备排错之前 |
 | 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 不分场景套用"AI 风"：商务工具满是毛玻璃、紫蓝渐变、霓虹；娱乐应用却做得死板。和一律鼓励"大胆"的设计 skill 不同，这里先看用途再定风格 | 设计或编写任何 UI 样式之前 |
-| 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | 按钮放错地方、入口藏得深、多余的确认和步骤；加用户没要的功能、菜单和入口 | 设计或修改交互、流程、表单、弹窗时；宣布 UI 完成之前 |
+| 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | 按钮放错地方、入口藏得深、多余的确认和步骤；加用户没要的功能、菜单和入口；界面上露出技术栈、hook 次数、ID、堆栈等开发者信息 | 设计或修改交互、流程、表单、弹窗时；宣布 UI 完成之前 |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自己能跑的命令、能读的文件、能查的报错，却停下来让用户去做 | 准备让用户运行、检查、复制、确认任何东西之前 |
 | 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 有变数的流程也用一个固定脚本跑到底，默认每一步都按预期发生 | 准备写脚本对会变化的系统执行一长串操作之前；一次性脚本失败两次以上时 |
 | 🔤 [**encoding-first**](skills/encoding-first/SKILL.md) | 含中文的文件随工具默认编码保存，乱码或报错后才改，下次再犯 | 写任何含中文或其他非 ASCII 字符的文件之前；一看到乱码时 |

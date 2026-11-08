@@ -1,6 +1,6 @@
 ---
 name: think-like-the-user
-description: "Lay out interactions in the order a first-time user works, not the order the code was written: actions next to what they act on, common tasks one step away, no extra confirmations, modes or wizard steps, no features, menus or settings nobody asked for, good defaults and clear errors. Use when designing or changing buttons, flows, forms, dialogs, menus, settings or CLI prompts; walk the main task and count steps before calling UI work done."
+description: "Lay out interactions in the order a first-time user works, not the order the code was written: actions next to what they act on, common tasks one step away, no extra confirmations, modes or wizard steps, no features, menus or settings nobody asked for, no developer-only info on screen (tech stack, \"Powered by\", hook/render counts, internal IDs, paths, stack traces), good defaults and clear errors. Use when designing or changing buttons, flows, forms, dialogs, menus, settings or CLI prompts; walk the main task and count steps before calling UI work done."
 ---
 
 # 站在用户的角度想交互
@@ -17,6 +17,7 @@ AI 写交互，常常是**按实现的顺序**而不是**按用户的顺序**组
 - 新建一个东西走了三步向导，其实只需要填一个名字
 - 按钮写着"提交"、"执行"、"确定"，用户不知道点了会发生什么
 - 出错时弹一句"操作失败"，输入的内容全清空了
+- 页脚写着"基于 React + Vite 构建"，面板上显示"hook 已触发 37 次"，列表里露出数据库 ID
 
 每一条单看都不致命，加起来就是"这东西怎么这么别扭"。
 
@@ -92,7 +93,44 @@ AI 很容易"顺手"多做：用户要一个导出按钮，结果多了导出格
 
 觉得某个附加功能确实有用时，**做完主要需求后提一句建议**，让用户决定要不要，而不是直接做进去。
 
-## 第五步：让用户随时知道发生了什么
+## 第五步：界面上只放用户关心的信息
+
+AI 是开发者，写代码时看到的都是开发者的信息，很容易把它们原样搬上界面：
+
+- 页脚、关于页、加载页写着"基于 React 18 + Vite + Tailwind 构建"、"Powered by GPT-4 / Claude"、"使用 SQLite 存储"
+- 面板上显示"hook 已触发 37 次"、"渲染次数 12"、"缓存命中率 94%"、"WebSocket 已连接"、"队列长度 3"
+- 列表里露出数据库 ID、UUID、内部状态码（`status: 2`、`PENDING_SYNC`）、字段名（`created_at`）
+- 显示本机文件路径、配置文件位置、端口号、API 地址、环境名（`dev`、`localhost:3000`）
+- 出错时把异常类型、堆栈、SQL 语句、原始 JSON 直接弹给用户
+- 一直挂着的调试面板、日志窗口、"耗时 132ms"、版本号后面跟着 git 提交哈希
+- 文案里冒出实现的词："payload"、"token"、"回调"、"实例"、"同步任务"
+
+这些信息分两类，都不该出现在用户界面上：
+
+1. **用户不关心的**：运行指标、内部计数、技术细节。对用户没有用，只是噪音，把真正要看的内容挤到后面。
+2. **用户不该知道的**：技术栈和依赖版本、服务器地址、文件路径、内部 ID、堆栈和 SQL。这是给攻击者的线索，也可能泄露商业信息（用了哪家模型、哪个供应商）。
+
+判断方法：**对每一条显示出来的信息问"用户看到它，能用来做什么决定或操作吗？"** 不能，就不放在用户界面上。
+
+| 开发者信息 | 用户界面上改成 | 开发者信息放哪 |
+| --- | --- | --- |
+| 技术栈、框架、模型名、"Powered by" | 不写；关于页最多写产品名 + 版本号 | README、依赖文件 |
+| hook / 渲染 / 请求次数、耗时、缓存命中率 | 不显示 | 控制台日志、开发者工具 |
+| "WebSocket 已连接"、队列长度 | 只在影响用户时说人话："网络已断开，恢复后会自动保存" | 日志 |
+| 数据库 ID、UUID、内部状态码、字段名 | 用户认识的名字和状态："待审批"、"创建时间" | 代码、日志 |
+| 异常、堆栈、SQL、原始 JSON | 说清哪里出错、用户该怎么办；必要时给一个可复制的错误编号方便反馈 | 日志文件 |
+| 文件路径、端口、API 地址、环境名 | 不显示；用户确实需要找文件时给"打开所在文件夹"按钮 | 配置、日志 |
+| 调试面板、日志窗口 | 默认不出现 | 开发模式开关、环境变量、隐藏的诊断入口 |
+
+要保留调试信息时：放到控制台/日志，或者用开发模式开关（`DEBUG=1`、`import.meta.env.DEV`）控制，**发布版默认关闭**。
+
+例外：
+
+- **用户本身就是开发者**（开发者工具、CLI、监控面板、调试器），这些信息就是用户要看的内容，照常显示。
+- 用户明确要求显示某项信息（"把耗时显示出来"、"在页脚写上用了什么技术"）。
+- 用户为了排查问题需要的信息（版本号、可复制的错误详情），放在"关于"或"复制诊断信息"里，不要铺在主界面上。
+
+## 第六步：让用户随时知道发生了什么
 
 - **按钮文案 = 动词 + 对象**："导出 CSV"、"删除项目"、"发送邀请"，而不是"提交"、"执行"、"确定"。用用户的词，不用实现的词（不写"同步 payload"、"触发 job"）。
 - **点了要有反应**：100ms 内要有视觉反馈；超过 1 秒显示进度或加载状态，并禁用按钮防止重复提交。
@@ -104,7 +142,7 @@ AI 很容易"顺手"多做：用户要一个导出按钮，结果多了导出格
 
 CLI 也一样：常用参数有短选项和合理默认值；危险操作要确认但提供 `--yes`；出错信息说明怎么修；长任务显示进度。
 
-## 第六步：实际走一遍
+## 第七步：实际走一遍
 
 写完不等于好用。交付前必须**真的以用户身份走一遍**主要任务（截图方式见 background-friendly）：
 
@@ -113,6 +151,7 @@ CLI 也一样：常用参数有短选项和合理默认值；危险操作要确�
 3. 只用键盘走一遍。
 4. 故意做错一次：输入错误、中途取消、网络断开，看会发生什么，输入会不会丢。
 5. 窗口缩小、内容很多或为空时，按钮还在合理的位置吗？
+6. 把界面上每一段文字、每一个数字读一遍：有没有技术栈、内部计数、ID、路径、堆栈这类只有开发者才看得懂或才该看到的东西？
 
 走不了（没有运行环境）时，明确告诉用户"交互流程未实际验证"，并把你设计的步骤列出来让用户检查。
 
@@ -131,6 +170,7 @@ CLI 也一样：常用参数有短选项和合理默认值；危险操作要确�
 - [ ] 符合平台惯例（按钮顺序、位置、快捷键）吗？
 - [ ] 主要任务的每一步都问过"能不能删、能不能默认、能不能合并"吗？
 - [ ] 每个功能、菜单、入口都是用户要的或必需的？没有占位入口、没人要的设置项？
+- [ ] 界面上每一条信息用户都用得上？没有技术栈、内部计数、ID、路径、堆栈这类开发者信息（开发者工具除外）？
 - [ ] 确认弹窗只用在不可逆操作上？可撤销的操作给了撤销？
 - [ ] 按钮文案是"动词 + 对象"？用的是用户的词？
 - [ ] 加载、成功、出错、空状态都处理了？出错时输入保留了吗？

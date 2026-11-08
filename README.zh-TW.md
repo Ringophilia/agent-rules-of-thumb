@@ -46,7 +46,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 習慣性地用最熟悉、而不是最合適的工具 | 慢操作、批次操作、跨機器操作之前 |
 | 🙋 [**maybe-it-was-the-user**](skills/maybe-it-was-the-user/SKILL.md) | 使用者關掉了視窗、改了檔案，卻被當成程式出錯，開始除錯或反覆重啟 | 程式、視窗、檔案意外變化，準備除錯之前 |
 | 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 不分場景套用「AI 風」：商務工具滿是毛玻璃、紫藍漸層、霓虹；娛樂應用卻做得死板。和一律鼓勵「大膽」的設計 skill 不同，這裡先看用途再定風格 | 設計或撰寫任何 UI 樣式之前 |
-| 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | 按鈕放錯地方、入口藏得深、多餘的確認和步驟；加使用者沒要的功能、選單和入口 | 設計或修改互動、流程、表單、對話框時；宣布 UI 完成之前 |
+| 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | 按鈕放錯地方、入口藏得深、多餘的確認和步驟；加使用者沒要的功能、選單和入口；介面上露出技術棧、hook 次數、ID、堆疊等開發者資訊 | 設計或修改互動、流程、表單、對話框時；宣布 UI 完成之前 |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自己能跑的指令、能讀的檔案、能查的錯誤，卻停下來讓使用者去做 | 準備讓使用者執行、檢查、複製、確認任何東西之前 |
 | 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 有變數的流程也用一個固定腳本跑到底，預設每一步都照預期發生 | 準備寫腳本對會變化的系統執行一長串操作之前；一次性腳本失敗兩次以上時 |
 | 🔤 [**encoding-first**](skills/encoding-first/SKILL.md) | 含中文的檔案隨工具預設編碼儲存，亂碼或報錯後才改，下次再犯 | 寫任何含中文或其他非 ASCII 字元的檔案之前；一看到亂碼時 |

@@ -46,7 +46,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 最適なツールではなく、使い慣れたツールを惰性で使う | 時間のかかる操作、一括処理、マシンをまたぐ操作の前 |
 | 🙋 [**maybe-it-was-the-user**](skills/maybe-it-was-the-user/SKILL.md) | ユーザーが閉じたウィンドウや編集したファイルをバグとみなし、デバッグや再起動を繰り返す | プログラム・ウィンドウ・ファイルが予期せず変わり、デバッグを始める前 |
 | 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 場面を問わず「AI っぽい」見た目：業務ツールにすりガラス・紫青グラデーション・ネオン、娯楽アプリは逆に味気ない。一律に「大胆に」と勧めるデザイン skill と違い、まず用途で決める | UI のデザインやスタイリングを始める前 |
-| 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | ボタンの配置が不自然、入口が深い、不要な確認や手順が多い、頼まれていない機能・メニュー・入口を足す | 操作・フロー・フォーム・ダイアログを設計・変更するとき、UI 完成と言う前 |
+| 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | ボタンの配置が不自然、入口が深い、不要な確認や手順が多い、頼まれていない機能・メニュー・入口を足す、技術スタックや hook の回数・ID・スタックトレースなど開発者向けの情報を画面に出す | 操作・フロー・フォーム・ダイアログを設計・変更するとき、UI 完成と言う前 |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自分で実行できるコマンド、読めるファイル、調べられるエラーなのに、止まってユーザーにやらせる | ユーザーに実行・確認・コピー・承認を頼む前 |
 | 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 不確定要素のある処理も固定スクリプトで最後まで流し、各ステップが想定どおりに起きたとみなす | 変化するシステムに対して長い操作列をスクリプト化する前、使い切りスクリプトが 2 回以上失敗したとき |
 | 🔤 [**encoding-first**](skills/encoding-first/SKILL.md) | 非 ASCII 文字を含むファイルをツール既定のエンコーディングで保存し、文字化けやエラーが出てから直す。それを何度も繰り返す | 中国語・日本語など非 ASCII 文字を含むファイルを書く前、文字化けに気づいたとき |
