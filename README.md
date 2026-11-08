@@ -46,23 +46,16 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 
 各条 skill 的**原则是通用的**；示例偏 Windows / PowerShell，因为它们来自 Windows 桌面与虚拟机自动化的实际经历。
 
-### 什么时候会用到哪一条
+### 速查：智能体正准备……
 
-```mermaid
-flowchart LR
-    A([智能体正准备……]) --> B["截图 / 开 GUI / 点界面"]
-    A --> C["说「已完成 / 已退出」"]
-    A --> D["写 sleep 等结果"]
-    A --> E["说「做不到」"]
-    A --> F["跑一个慢 / 批量操作"]
-    A --> G["面对「点了没反应」"]
-    B --> B1[background-friendly]
-    C --> C1[screenshot-first]
-    D --> D1[no-blind-wait]
-    E --> E1[never-give-up-early]
-    F --> F1[think-about-faster-path]
-    G --> G1[dialog-handling]
-```
+| 正准备…… | 先读 |
+| --- | --- |
+| 截图、开 GUI、点界面 | 🫥 background-friendly |
+| 说"已完成 / 已退出 / 已修好" | 📸 screenshot-first |
+| 写 `sleep` 等结果 | ⏱️ no-blind-wait |
+| 说"做不到 / 不值得" | 🔍 never-give-up-early |
+| 跑一个慢的、批量的、跨机的操作 | 🚀 think-about-faster-path |
+| 面对"点了没反应 / 卡住了" | 🪟 dialog-handling |
 
 ## 🔥 它们从哪来
 
