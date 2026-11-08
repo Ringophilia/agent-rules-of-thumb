@@ -11,7 +11,7 @@ that correct the most common and most expensive habits of AI agents doing automa
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-the-skills)
+[![Skills](https://img.shields.io/badge/skills-14-blue.svg)](#-the-skills)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-installation)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-zero-dependency-script-toolbox)
 
@@ -40,6 +40,7 @@ None of these make a task fail outright. They make it **ten times slower, reach 
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | Full-screen screenshots, stealing focus, taking over the user's mouse and keyboard without asking | Before screenshots, launching or debugging GUI apps, driving an app's UI, or using computer-use |
 | 🧩 [**compare-in-one-image**](skills/compare-in-one-image/SKILL.md) | Opening screenshots one by one and comparing them from memory: slow, misses small differences, costs N times the tokens | Before viewing two or more screenshots, renders or frames to spot a difference |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | Assuming an unseen dialog doesn't exist; dismissing it without reading it; killing processes by name | A click does nothing, an app looks frozen, a command hangs waiting for input |
+| 📋 [**look-beyond-the-log**](skills/look-beyond-the-log/SKILL.md) | Rereading its own log over and over while the real error sits in another process's popup (crash reporter, missing-DLL loader box, runtime assert, helper or installer, antivirus), the event log or a crash dump | A program errors, crashes, exits early or hangs, and its log is empty, cut off, or shows nothing wrong |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | Declaring something "impossible" after a few personal attempts; retreating to a fallback (software rendering, compatibility mode, a downgrade) after one symptom that was only a transitional state | Before saying "this won't work" or "not worth it"; before switching to a fallback or downgrade |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | Waiting for results with fixed-length sleeps | When about to write a sleep to wait for something |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | Asserting state from indirect signals like process names and exit codes | Before saying "it started / it exited / it's fixed" |
@@ -67,6 +68,7 @@ The **principles are platform-agnostic**. The examples lean toward Windows / Pow
 | Say "can't be done / not worth it", or switch to a fallback | 🔍 never-give-up-early |
 | Run something slow, bulk, or cross-machine | 🚀 think-about-faster-path |
 | Face "the click did nothing / it's stuck" | 🪟 dialog-handling |
+| Read a log again to find why a program failed | 📋 look-beyond-the-log |
 | Debug something that "suddenly" closed or changed | 🙋 maybe-it-was-the-user |
 | Pick colours, fonts, and effects for a UI | 🎨 style-fits-the-job |
 | Place buttons, design a flow, or say the UI is done | 🧭 think-like-the-user |
@@ -121,6 +123,17 @@ A lookup by process name came back empty and `MainWindowTitle` was blank, so the
 An "Are you sure you want to unbind?" dialog kept popping up and kept being dismissed as noise. In fact, the account being bound to an old machine was exactly why login failed. Clicking "OK" to unbind made the whole flow work.
 
 **Lesson**: read the dialog before handling it, and decide whether it's an obstacle or the entrance. If the entrance is irreversible, ask the user first.
+
+</details>
+
+<details>
+<summary><b>📋 look-beyond-the-log</b>: the error was in another program's popup</summary>
+
+<br>
+
+A program the agent had built failed on launch. The agent kept reading the program's log, adding more logging and reading again, and never found the cause. The answer was on screen the whole time: a different process had popped up an error box (the system loader reporting a missing DLL). The program died before its first log line, so the log could never say so.
+
+**Lesson**: a log only holds what the program had the chance to write. Note the time, reproduce, then sweep every process's dialogs, the event log, crash dumps and stderr before rereading the log.
 
 </details>
 
@@ -224,12 +237,13 @@ Paste the body of `SKILL.md` (everything after the frontmatter between the two `
 
 ## 🧰 Zero-dependency script toolbox
 
-Three of the skills ship ready-to-run Windows scripts that **only need the PowerShell 5.1 and .NET Framework that come with Windows**. Nothing to install.
+Four of the skills ship ready-to-run Windows scripts that **only need the PowerShell 5.1 and .NET Framework that come with Windows**. Nothing to install.
 
 | Need | Script | Disturbs the user? |
 | --- | --- | :---: |
 | Find covered or hidden Win32 dialogs; read their controls' text and IDs | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | No |
 | Press a Win32 dialog button (WM_COMMAND, no activation needed) | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | No |
+| Sweep everything since a point in time for errors outside the log: popups from any process, new processes, event log errors, crash dumps | [`look-beyond-the-log/scripts/collect-errors.ps1`](skills/look-beyond-the-log/scripts/collect-errors.ps1) | No |
 | Capture a single window, even covered or minimized, without stealing focus; `-Burst` takes a timed series of frames | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | No |
 | Stitch several shots into one labelled grid for a single-look comparison; `-Diff` boxes what changed. | [`compare-in-one-image/scripts/compose-shots.ps1`](skills/compare-in-one-image/scripts/compose-shots.ps1) | No |
 | Launch a program minimized and not activated, logging its output | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | No |

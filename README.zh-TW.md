@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一覽)
+[![Skills](https://img.shields.io/badge/skills-14-blue.svg)](#-skills-一覽)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安裝)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依賴腳本工具箱)
 
@@ -40,6 +40,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 截全螢幕、搶焦點、動使用者的滑鼠鍵盤；不問就佔用使用者的桌面 | 截圖、啟動或除錯 GUI 程式、操作程式介面、使用 computer-use 之前 |
 | 🧩 [**compare-in-one-image**](skills/compare-in-one-image/SKILL.md) | 一張張打開截圖、靠記憶比對：慢、看不出細微差別、token 花 N 倍 | 準備看兩張以上的截圖、算繪圖或影片影格來找差異之前 |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 看不見對話框就當它不存在；沒讀內容就關掉；按程序名稱亂殺 | 點擊沒反應、程式看似當掉、指令卡住等輸入 |
+| 📋 [**look-beyond-the-log**](skills/look-beyond-the-log/SKILL.md) | 一遍遍讀自己的日誌，真正的錯誤卻在別的程序的對話框（當機回報、缺 DLL 的系統提示、執行階段斷言、子程序或安裝程式、防毒軟體）、事件記錄或傾印檔裡 | 程式報錯、當掉、提早結束或卡住，而日誌是空的、斷在半截，或看不出問題 |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己試了幾次失敗，就宣布「不可行」；主方案出現一次過渡性的異常，就退到備援方案（軟體算繪、相容模式、降級實作） | 準備說「行不通 / 不值得做」、或改用備援和降級方案之前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定時長的 sleep 等結果 | 準備寫 sleep 等某件事完成時 |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | 根據程序名稱、結束代碼等間接指標斷言狀態 | 準備說「已啟動 / 已結束 / 已修好」之前 |
@@ -67,6 +68,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 說「做不到 / 不值得」，或改用備援方案 | 🔍 never-give-up-early |
 | 跑一個慢的、批次的、跨機器的操作 | 🚀 think-about-faster-path |
 | 面對「點了沒反應 / 卡住了」 | 🪟 dialog-handling |
+| 為了找程式失敗的原因，又要去讀一遍日誌 | 📋 look-beyond-the-log |
 | 排查「突然」關閉或變化的東西 | 🙋 maybe-it-was-the-user |
 | 為 UI 選配色、字型、效果 | 🎨 style-fits-the-job |
 | 擺按鈕、設計流程、宣布介面做完了 | 🧭 think-like-the-user |
@@ -121,6 +123,17 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 一個反覆出現的「您確定要解除綁定嗎？」被當成雜訊，關了一次又一次。實際上帳號綁在舊機器上，正是它導致登入失敗；按下「確定」解除綁定之後，流程立刻就通了。
 
 **教訓**：先讀對話框內容，再判斷它是障礙還是入口；如果入口是不可逆操作，先問使用者。
+
+</details>
+
+<details>
+<summary><b>📋 look-beyond-the-log</b>：錯誤在另一個程式的對話框裡</summary>
+
+<br>
+
+智慧代理做的程式一啟動就報錯。它一遍遍讀程式的日誌、加日誌、再讀，始終找不到原因。答案一直擺在螢幕上：另一個程序跳出了錯誤視窗（系統載入器提示缺 DLL）。程式在寫第一行日誌之前就結束了，日誌裡不可能有。
+
+**教訓**：日誌只記錄程式來得及寫下的東西。記下時間點、重現，然後把所有程序的對話框、事件記錄、傾印檔和 stderr 掃一遍，再回頭讀日誌。
 
 </details>
 
@@ -224,12 +237,13 @@ skill 是否被載入，取決於代理自己判斷 `description` 和目前任�
 
 ## 🧰 零依賴腳本工具箱
 
-三條 skill 附帶可直接執行的 Windows 腳本，**只依賴系統內建的 PowerShell 5.1 和 .NET Framework**，不需要安裝任何東西。
+四條 skill 附帶可直接執行的 Windows 腳本，**只依賴系統內建的 PowerShell 5.1 和 .NET Framework**，不需要安裝任何東西。
 
 | 需求 | 腳本 | 打擾使用者？ |
 | --- | --- | :---: |
 | 找被遮住或隱藏的 Win32 對話框，讀出子控制項的文字和 ID | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | 否 |
 | 點擊 Win32 對話框按鈕（WM_COMMAND，不需要啟用視窗） | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | 否 |
+| 依時間點掃出日誌之外的錯誤：所有程序的對話框、新程序、事件記錄錯誤、傾印檔 | [`look-beyond-the-log/scripts/collect-errors.ps1`](skills/look-beyond-the-log/scripts/collect-errors.ps1) | 否 |
 | 截單一視窗（被遮住或最小化都行，不搶焦點）；`-Burst` 按固定間隔連拍多幀 | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | 否 |
 | 把多張截圖拼成一張帶標籤的網格，一眼比對；`-Diff` 用紅框標出變化 | [`compare-in-one-image/scripts/compose-shots.ps1`](skills/compare-in-one-image/scripts/compose-shots.ps1) | 否 |
 | 以最小化、不啟用的方式啟動程式，輸出寫到日誌 | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | 否 |

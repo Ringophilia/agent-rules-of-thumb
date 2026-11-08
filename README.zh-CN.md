@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一览)
+[![Skills](https://img.shields.io/badge/skills-14-blue.svg)](#-skills-一览)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安装)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依赖脚本工具箱)
 
@@ -40,6 +40,7 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 截全屏、抢焦点、动用户的鼠标键盘；不问就占用用户的桌面 | 截图、启动或调试 GUI 程序、操作程序界面、使用 computer-use 之前 |
 | 🧩 [**compare-in-one-image**](skills/compare-in-one-image/SKILL.md) | 一张张打开截图、靠记忆对照：慢、看不出细微差别、token 花 N 倍 | 准备看两张以上的截图、渲染图或视频帧来找差异之前 |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 看不见弹窗就当它不存在；没读内容就点掉；按进程名乱杀 | 点击没反应、程序看似卡死、命令挂住等输入 |
+| 📋 [**look-beyond-the-log**](skills/look-beyond-the-log/SKILL.md) | 一遍遍读自己的日志，真正的报错却在别的进程的弹窗（崩溃报告、缺 DLL 的系统提示、运行库断言、子进程或安装器、杀软）、事件日志或崩溃转储里 | 程序报错、崩溃、提前退出或卡住，而日志是空的、断在半截，或者看不出问题 |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己试了几次失败，就宣布"不可行"；主方案出现一次过渡性的异常，就退到兜底方案（软件渲染、兼容模式、降级实现） | 准备说"走不通 / 不值得做"、或改用兜底和降级方案之前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定时长的 sleep 等结果 | 准备写 sleep 等某件事完成时 |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | 根据进程名、退出码等间接指标断言状态 | 准备说"已启动 / 已退出 / 已修好"之前 |
@@ -64,6 +65,7 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | 说"做不到 / 不值得"，或改用兜底方案 | 🔍 never-give-up-early |
 | 跑一个慢的、批量的、跨机的操作 | 🚀 think-about-faster-path |
 | 面对"点了没反应 / 卡住了" | 🪟 dialog-handling |
+| 为了找程序失败的原因，又要去读一遍日志 | 📋 look-beyond-the-log |
 | 排查"突然"关闭或变化的东西 | 🙋 maybe-it-was-the-user |
 | 给 UI 选配色、字体、效果 | 🎨 style-fits-the-job |
 | 摆按钮、设计流程、宣布界面做完了 | 🧭 think-like-the-user |
@@ -118,6 +120,17 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 一个反复出现的「您确认要解绑吗？」被当成噪声，关了一次又一次。实际上账号绑在旧机器上，正是它导致登录失败；点「确定」解绑之后，流程立刻就通了。
 
 **教训**：先读弹窗内容，再判断它是障碍还是入口；如果入口是不可逆操作，先问用户。
+
+</details>
+
+<details>
+<summary><b>📋 look-beyond-the-log</b>：报错在另一个程序的弹窗里</summary>
+
+<br>
+
+智能体做的程序一启动就报错。它一遍遍读程序的日志、加日志、再读，始终找不到原因。答案一直摆在屏幕上：另一个进程弹出了报错窗口（系统加载器提示缺 DLL）。程序在写第一行日志之前就死了，日志里不可能有。
+
+**教训**：日志只记录程序来得及写下的东西。记下时间点、复现，然后把所有进程的弹窗、事件日志、崩溃转储和 stderr 扫一遍，再回头读日志。
 
 </details>
 
@@ -221,12 +234,13 @@ Skill 是否被加载，取决于智能体自己判断 `description` 和当前�
 
 ## 🧰 零依赖脚本工具箱
 
-三条 skill 附带可直接运行的 Windows 脚本，**只依赖系统自带的 PowerShell 5.1 和 .NET Framework**，不需要安装任何东西。
+四条 skill 附带可直接运行的 Windows 脚本，**只依赖系统自带的 PowerShell 5.1 和 .NET Framework**，不需要安装任何东西。
 
 | 需求 | 脚本 | 打扰用户？ |
 | --- | --- | :---: |
 | 找被遮挡或隐藏的 Win32 对话框，读出子控件的文字和 ID | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | 否 |
 | 点击 Win32 对话框按钮（WM_COMMAND，不需要激活窗口） | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | 否 |
+| 按时间点扫出日志之外的报错：所有进程的弹窗、新进程、事件日志错误、崩溃转储 | [`look-beyond-the-log/scripts/collect-errors.ps1`](skills/look-beyond-the-log/scripts/collect-errors.ps1) | 否 |
 | 截单个窗口（被遮挡或最小化都行，不抢焦点）；`-Burst` 按固定间隔连拍多帧 | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | 否 |
 | 把多张截图拼成一张带标签的网格，一眼对比；`-Diff` 用红框标出变化 | [`compare-in-one-image/scripts/compose-shots.ps1`](skills/compare-in-one-image/scripts/compose-shots.ps1) | 否 |
 | 以最小化、不激活的方式启动程序，输出写到日志 | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | 否 |

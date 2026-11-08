@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一覧)
+[![Skills](https://img.shields.io/badge/skills-14-blue.svg)](#-skills-一覧)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-インストール)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-依存ゼロのスクリプト集)
 
@@ -40,6 +40,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 全画面スクショ、フォーカスを奪う、許可なくユーザーのマウスとキーボードを使う | スクリーンショット、GUI アプリの起動・デバッグ、UI 操作、computer-use を使う前 |
 | 🧩 [**compare-in-one-image**](skills/compare-in-one-image/SKILL.md) | スクショを 1 枚ずつ開き、記憶を頼りに見比べる。遅く、細かな違いを見落とし、トークンも N 倍かかる | 2 枚以上のスクショ・レンダリング・動画フレームを見比べて違いを探す前 |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 見えないダイアログは存在しないとみなす。内容を読まずに閉じる。プロセス名でまとめて kill する | クリックが効かない、アプリが固まったように見える、コマンドが入力待ちで止まった |
+| 📋 [**look-beyond-the-log**](skills/look-beyond-the-log/SKILL.md) | 自分のログを何度も読み返す。本当のエラーは別プロセスのポップアップ（クラッシュレポーター、DLL 不足を知らせるローダーのダイアログ、ランタイムのアサート、子プロセスやインストーラー、ウイルス対策）やイベントログ、クラッシュダンプにある | プログラムがエラー・クラッシュ・早期終了・ハングし、ログが空、途中で途切れている、または異常が見当たらない |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自分で数回試して失敗しただけで「不可能」と宣言する。一時的な状態にすぎない異常を一度見ただけで、フォールバック（ソフトウェアレンダリング、互換モード、機能縮小）に退く | 「うまくいかない / やる価値がない」と言う前、フォールバックや機能縮小に切り替える前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 固定時間の sleep で結果を待つ | 何かの完了を sleep で待とうとしたとき |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | プロセス名や終了コードなど間接的な指標で状態を断定する | 「起動した / 終了した / 直った」と言う前 |
@@ -67,6 +68,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | 「できない / やる価値がない」と言う、フォールバックに切り替える | 🔍 never-give-up-early |
 | 遅い・一括・マシンをまたぐ処理を走らせる | 🚀 think-about-faster-path |
 | 「クリックが効かない / 固まった」に直面した | 🪟 dialog-handling |
+| プログラムが失敗した理由を探すため、もう一度ログを読む | 📋 look-beyond-the-log |
 | 「突然」閉じた・変わったものをデバッグする | 🙋 maybe-it-was-the-user |
 | UI の配色・フォント・エフェクトを選ぶ | 🎨 style-fits-the-job |
 | ボタンを配置する、フローを設計する、UI 完成と言う | 🧭 think-like-the-user |
@@ -121,6 +123,17 @@ AI エージェントが失敗する理由は「できないから」より、�
 繰り返し出てくる「バインドを解除しますか？」をノイズとみなして何度も閉じていました。実はアカウントが古いマシンに紐づいていたことこそがログイン失敗の原因で、「OK」を押して解除した途端、すべてが進みました。
 
 **教訓**：処理する前にダイアログの内容を読み、それが障害なのか入口なのかを判断する。入口が取り消せない操作なら、先にユーザーに確認する。
+
+</details>
+
+<details>
+<summary><b>📋 look-beyond-the-log</b>：エラーは別のプログラムのポップアップにあった</summary>
+
+<br>
+
+エージェントが作ったプログラムが起動時にエラーになりました。エージェントはログを読み、ログを足し、また読み直しましたが、原因は見つかりませんでした。答えはずっと画面に出ていました。別のプロセスがエラーダイアログ（DLL が見つからないというシステムローダーの通知）を出していたのです。プログラムは最初のログ行を書く前に終了していたので、ログに残るはずがありませんでした。
+
+**教訓**：ログには、プログラムが書く機会のあったことしか残りません。時刻を記録して再現し、全プロセスのダイアログ、イベントログ、クラッシュダンプ、stderr を一通り調べてからログに戻ります。
 
 </details>
 
@@ -224,12 +237,13 @@ skill が読み込まれるかどうかは、エージェントが `description`
 
 ## 🧰 依存ゼロのスクリプト集
 
-3 つの skill には、そのまま実行できる Windows スクリプトが付属しています。**Windows に標準で入っている PowerShell 5.1 と .NET Framework だけ**で動き、追加のインストールは不要です。
+4 つの skill には、そのまま実行できる Windows スクリプトが付属しています。**Windows に標準で入っている PowerShell 5.1 と .NET Framework だけ**で動き、追加のインストールは不要です。
 
 | 用途 | スクリプト | ユーザーの邪魔をするか |
 | --- | --- | :---: |
 | 隠れている／非表示の Win32 ダイアログを探し、子コントロールのテキストと ID を読む | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | しない |
 | Win32 ダイアログのボタンを押す（WM_COMMAND、アクティブ化不要） | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | しない |
+| ある時刻以降の、ログの外にあるエラーをまとめて調べる：全プロセスのポップアップ、新しいプロセス、イベントログのエラー、クラッシュダンプ | [`look-beyond-the-log/scripts/collect-errors.ps1`](skills/look-beyond-the-log/scripts/collect-errors.ps1) | しない |
 | 単一ウィンドウを撮る（隠れていても最小化されていても可、フォーカスを奪わない）。`-Burst` で一定間隔の連写 | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | しない |
 | 複数のスクショをラベル付きの 1 枚のグリッドにまとめ、一目で比較する。`-Diff` で変化箇所を赤枠表示 | [`compare-in-one-image/scripts/compose-shots.ps1`](skills/compare-in-one-image/scripts/compose-shots.ps1) | しない |
 | プログラムを最小化・非アクティブで起動し、出力をログに書く | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | しない |

@@ -11,6 +11,7 @@
 - **Do it yourself**: don't ask the user to run a command, read a file or check a log that your own tools can handle. (just-do-it-yourself)
 - **Maybe it was the user**: when a window disappears, a file changes or a process exits, check exit codes and logs first; if it looks like the user, ask before debugging or overwriting. (maybe-it-was-the-user)
 - **Read the dialog**: when a click does nothing, an app looks frozen, or a command hangs without output, look for the dialog or prompt blocking it and read it before acting. (dialog-handling)
+- **Look beyond the log**: when a program fails and its log is empty, cut off or shows nothing wrong, note the time and sweep every process's popups (crash reporter, missing-DLL box, runtime assert, helper, antivirus), the event log, crash dumps and stderr before rereading the log. (look-beyond-the-log)
 - **Compare paths first**: for anything slow (>10 s), bulk or cross-machine, spend ten seconds on native tools, parallelism and batching. Move big files over the network, not through an environment's own copy command (VM guest copy, docker cp, adb pull); time a small sample first. (think-about-faster-path)
 - **Scripts need checkpoints**: against changing systems (GUIs, games, installers, web flows), check preconditions before key steps and stop on surprises. (no-blind-script)
 - **Encoding first**: before writing non-ASCII text, pick the encoding for the reader: .ps1 for PowerShell 5.1 is pure ASCII or UTF-8 with BOM; .bat, .sh and JSON have no BOM. (encoding-first)
