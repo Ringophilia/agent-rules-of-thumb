@@ -1,0 +1,7 @@
+# uia.ps1 compiles uia.cs into this on first run
+uia.exe
+
+# OS clutter
+Thumbs.db
+desktop.ini
+.DS_Store

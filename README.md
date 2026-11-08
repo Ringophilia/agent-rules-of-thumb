@@ -1,0 +1,237 @@
+<div align="center">
+
+# Agent Rules of Thumb
+
+**让 AI 智能体少走弯路的经验法则**
+
+一组从真实翻车现场总结出来的 [Agent Skills](https://agentskills.io)，<br>
+纠正 AI 智能体在自动化、排障、运维中最常见、也最费时间的坏习惯。
+
+*Battle-tested rules of thumb for AI agents, each one distilled from a real failure.*
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
+[![Skills](https://img.shields.io/badge/skills-6-blue.svg)](#-skills-一览)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安装)
+[![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依赖脚本工具箱)
+
+[Skills 一览](#-skills-一览) · [真实案例](#-它们从哪来) · [安装](#-安装) · [脚本工具箱](#-零依赖脚本工具箱) · [贡献](#-贡献)
+
+</div>
+
+---
+
+## 💡 为什么需要这些
+
+AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
+
+- 顺手用最熟悉的工具，而不是最合适的
+- 随手 `sleep 30`，等一个其实早就结束的任务
+- 进程名查不到就宣布"程序已退出"，可窗口明明还在屏幕上
+- 试了三次失败，就告诉用户"技术上不可行"
+- 截一张全屏、把窗口切到前台，打断正在用电脑的用户
+
+这些习惯不会让任务立刻失败，只会让它**慢十倍、结论出错、或者把用户晾在一边**。本仓库里的每条 skill 都对应一次真实发生过的事故：先写清楚错在哪，再给出可执行的流程和检查清单。
+
+## 📚 Skills 一览
+
+| Skill | 纠正的坏习惯 | 什么时候触发 |
+| --- | --- | --- |
+| 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 截全屏、抢焦点、动用户的鼠标键盘；不问就占用用户的桌面 | 截图、启动或调试 GUI 程序、操作程序界面、使用 computer-use 之前 |
+| 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 看不见弹窗就当它不存在；没读内容就点掉；按进程名乱杀 | 点击没反应、程序看似卡死、命令挂住等输入 |
+| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己试了几次失败，就宣布"不可行" | 准备说"走不通 / 不值得做"之前 |
+| ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定时长的 sleep 等结果 | 准备写 sleep 等某件事完成时 |
+| 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | 根据进程名、退出码等间接指标断言状态 | 准备说"已启动 / 已退出 / 已修好"之前 |
+| 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 习惯性地用最熟悉、而不是最合适的工具 | 慢操作、批量操作、跨机操作之前 |
+
+各条 skill 的**原则是通用的**；示例偏 Windows / PowerShell，因为它们来自 Windows 桌面与虚拟机自动化的实际经历。
+
+### 什么时候会用到哪一条
+
+```mermaid
+flowchart LR
+    A([智能体正准备……]) --> B["截图 / 开 GUI / 点界面"]
+    A --> C["说「已完成 / 已退出」"]
+    A --> D["写 sleep 等结果"]
+    A --> E["说「做不到」"]
+    A --> F["跑一个慢 / 批量操作"]
+    A --> G["面对「点了没反应」"]
+    B --> B1[background-friendly]
+    C --> C1[screenshot-first]
+    D --> D1[no-blind-wait]
+    E --> E1[never-give-up-early]
+    F --> F1[think-about-faster-path]
+    G --> G1[dialog-handling]
+```
+
+## 🔥 它们从哪来
+
+每条 skill 都源自一次具体的事故。点开看看当时发生了什么：
+
+<details>
+<summary><b>🚀 think-about-faster-path</b>：同一个文件，换个命令快了 20 倍</summary>
+
+<br>
+
+要在两台机器之间传一个 44.4 MB 的文件，顺手用了 Windows PowerShell 5.1 的 `Invoke-WebRequest`，结果要几十秒，有时直接超时。换成 `curl.exe` 之后只用了 **1.9 秒**。
+
+根因是 5.1 的进度条渲染会把下载拖慢几十倍。而且在 PowerShell 5.1 里，`curl` 其实是 `Invoke-WebRequest` 的别名。
+
+**教训**：更好的工具一直都知道，只是动手前没做比较。
+
+</details>
+
+<details>
+<summary><b>⏱️ no-blind-wait</b>：10 秒的活，等了 100 多秒</summary>
+
+<br>
+
+任务脚本里 `Start-Sleep 50`，调度端又 `Start-Sleep 54`。可那个远程调用本身就是同步的：返回时任务早就做完了。时间全浪费了，出错时也只看到一个"超时"，不知道卡在哪一步。
+
+**教训**：先看调用是不是同步的；需要轮询时，"条件 + 间隔 + 总超时 + 超时后做什么"缺一不可；长流程要打阶段标记。
+
+</details>
+
+<details>
+<summary><b>📸 screenshot-first</b>：进程"不存在"，窗口却在屏幕中央</summary>
+
+<br>
+
+按名字查进程返回空，`MainWindowTitle` 也是空的，于是判断程序"已退出"。截图一看，窗口就在屏幕中央等人去点。原来运行时把映像名改成了一串数字。
+
+**教训**：进程名、退出码、状态字段都是间接指标。和一手证据冲突时，信一手证据，并追查间接指标为什么说错了。
+
+</details>
+
+<details>
+<summary><b>🪟 dialog-handling</b>：被反复关掉的弹窗，正是出路</summary>
+
+<br>
+
+一个反复出现的「您确认要解绑吗？」被当成噪声，关了一次又一次。实际上账号绑在旧机器上，正是它导致登录失败；点「确定」解绑之后，流程立刻就通了。
+
+**教训**：先读弹窗内容，再判断它是障碍还是入口；如果入口是不可逆操作，先问用户。
+
+</details>
+
+<details>
+<summary><b>🔍 never-give-up-early</b>：判了"死刑"的问题，30 分钟就解决了</summary>
+
+<br>
+
+为了让一个商用软件在虚拟机里启动，自己改了十几项配置，全部失败，于是得出结论："检测层次太深，不值得继续。"用户反问：只凭一篇转载帖和一轮尝试就下结论，调研太少了。随后开了 4 路独立调研，其中一路找到了现成的开源驱动，**前后 30 分钟**解决。
+
+**教训**：你试过的只是全部方案里很小的一块。说"不行"之前，要拿出具体的排除证据和查过的来源。
+
+</details>
+
+<details>
+<summary><b>🫥 background-friendly</b>：AI 在调试，用户却没法用电脑</summary>
+
+<br>
+
+为了"看一眼程序现在什么样"，智能体把窗口切到前台截全屏、移动鼠标去点按钮，用户手上的工作一次次被打断，截图里还带上了用户屏幕上的其他内容。
+
+**改进后**：只截目标窗口，被遮挡甚至最小化的窗口也能截，而且不抢焦点；程序以最小化、不激活的方式启动；用 UI Automation 在后台点按钮、填文本。确实必须占用桌面时，**先请求批准，没批准就暂停**。
+
+</details>
+
+## 📦 安装
+
+### Claude Code
+
+```bash
+git clone https://github.com/Ringophilia/agent-rules-of-thumb.git
+cd agent-rules-of-thumb
+
+# 对所有项目生效
+mkdir -p ~/.claude/skills && cp -r skills/* ~/.claude/skills/
+# 或者只对当前项目生效（在你的项目根目录执行）
+mkdir -p .claude/skills && cp -r /path/to/agent-rules-of-thumb/skills/* .claude/skills/
+```
+
+<details>
+<summary>Windows PowerShell</summary>
+
+```powershell
+git clone https://github.com/Ringophilia/agent-rules-of-thumb.git
+New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
+Copy-Item -Recurse -Force agent-rules-of-thumb\skills\* "$HOME\.claude\skills\"
+```
+
+</details>
+
+可以只挑需要的 skill 复制。装好后开一个新会话即可生效。
+
+> [!TIP]
+> Skill 是否被加载，取决于智能体自己判断 `description` 和当前任务是否匹配。如果希望某条规则**始终生效**，可以在全局 `~/.claude/CLAUDE.md` 里加一行，例如：
+>
+> ```markdown
+> - 截图、启动或调试 GUI 程序、使用 computer-use 之前，先读 background-friendly skill 并照做。
+> ```
+
+### 其他支持 Agent Skills 标准的智能体
+
+把 skill 目录放到对应工具的 skills 目录，具体位置见该工具的文档。
+
+### 不支持 skills 的工具
+
+把 `SKILL.md` 的正文（去掉开头两个 `---` 之间的部分）粘贴进系统提示词或规则文件即可。这些原则本身不依赖任何特定平台。
+
+## 🧰 零依赖脚本工具箱
+
+两条 skill 附带可直接运行的 Windows 脚本，**只依赖系统自带的 PowerShell 5.1 和 .NET Framework**，不需要安装任何东西。
+
+| 需求 | 脚本 | 打扰用户？ |
+| --- | --- | :---: |
+| 找被遮挡或隐藏的 Win32 对话框，读出子控件的文字和 ID | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | 否 |
+| 点击 Win32 对话框按钮（WM_COMMAND，不需要激活窗口） | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | 否 |
+| 截单个窗口（被遮挡或最小化都行，不抢焦点） | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | 否 |
+| 以最小化、不激活的方式启动程序，输出写到日志 | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | 否 |
+| 用 UI Automation 在后台读控件树、点按钮、填文本、勾选 | [`background-friendly/scripts/uia.ps1`](skills/background-friendly/scripts/uia.ps1) | 否 |
+| 真实鼠标键盘输入，结束后还原前台窗口和鼠标位置 | [`background-friendly/scripts/desktop-input.ps1`](skills/background-friendly/scripts/desktop-input.ps1) | ⚠️ 需用户批准 |
+
+```powershell
+# 例：在后台截一个最小化的窗口，然后给它的文本框填值、点按钮，全程不抢焦点
+.\capture-window.ps1 -Title "My App" -Out shot.png
+.\uia.ps1 -Title "My App" -ControlType Edit -SetValue "hello"
+.\uia.ps1 -Title "My App" -Name "OK" -Invoke
+```
+
+> [!NOTE]
+> `uia.ps1` 首次运行时会用 Windows 自带的 `csc.exe` 把 `uia.cs` 编译成 `uia.exe`。原因是在 Windows PowerShell 里，托管 UIA 客户端加载不了 Win32 控件的代理，所有控件都只显示成没有 Pattern 的 `Pane`。所有脚本都保持纯 ASCII，以避开 PowerShell 5.1 按 ANSI 码页读取无 BOM UTF-8 脚本时出现的乱码问题。
+
+## 🧱 Skill 的结构
+
+遵循 [Agent Skills](https://agentskills.io) 开放标准：每个 skill 是一个目录，入口是 `SKILL.md`。
+
+```
+skills/
+  <skill-name>/
+    SKILL.md        # YAML frontmatter（name + description）+ Markdown 正文
+    scripts/        # 可选：skill 里引用的可执行脚本
+```
+
+`description` 是智能体决定"要不要加载这个 skill"的唯一依据，所以里面同时写了**做什么**和**什么时候用**。
+
+每条 skill 的正文大致按同一个结构组织：
+
+1. **反面案例**：真实发生的事故，错在哪
+2. **触发信号**：发现自己正要做什么、说什么时，就该停下来
+3. **正确做法**：可执行的步骤、命令、代码
+4. **边界**：什么时候规则不适用，什么时候该停下来问用户
+5. **检查清单**：动手前或宣布完成前逐项过一遍
+
+## 🤝 贡献
+
+欢迎提 Issue 和 PR，尤其欢迎这几类：
+
+- **新的翻车案例**：你的智能体反复犯的某个错，附上当时的现场（命令、输出、截图）
+- **其他平台的示例**：macOS / Linux 下的等价做法和脚本
+- **反例**：某条规则在你的场景里给出了错误的指导
+
+新增 skill 时请保持这几个约定：从真实案例出发；`description` 写清"做什么 + 什么时候用"；正文给出可执行的步骤而不是口号；脚本零依赖、纯 ASCII。
+
+## 📄 许可
+
+[MIT](LICENSE) © 2026 Ringophilia
