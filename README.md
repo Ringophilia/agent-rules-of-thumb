@@ -11,7 +11,7 @@ that correct the most common and most expensive habits of AI agents doing automa
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-11-blue.svg)](#-the-skills)
+[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-the-skills)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-installation)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-zero-dependency-script-toolbox)
 
@@ -48,6 +48,7 @@ None of these make a task fail outright. They make it **ten times slower, reach 
 | 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | Buttons in odd places, buried entry points, needless confirmations and extra steps; features, menus, and entry points nobody asked for | Designing or changing interactions, flows, forms, and dialogs; before calling UI work done |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | Stopping to ask the user to run a command, open a file, or paste an error it could handle itself | Before asking the user to run, check, copy, or confirm anything |
 | ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | Retreating to a fallback (software rendering, compatibility mode, a downgrade) after one odd symptom that was only a transitional state | Before abandoning the main approach for a fallback or downgrade |
+| 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | One fixed script for a process full of surprises, which keeps acting as if every step went to plan | Before scripting a long sequence against a changing system, and after a one-shot script has failed more than once |
 
 The **principles are platform-agnostic**. The examples lean toward Windows / PowerShell because that's where the incidents happened: Windows desktop and virtual-machine automation.
 
@@ -69,6 +70,7 @@ The **principles are platform-agnostic**. The examples lean toward Windows / Pow
 | Place buttons, design a flow, or say the UI is done | 🧭 think-like-the-user |
 | Ask the user to run a command or check something | 🛠️ just-do-it-yourself |
 | Switch to a fallback or downgraded approach | ↩️ dont-fall-back-too-soon |
+| Script a long sequence of actions from start to finish | 📜 no-blind-script |
 
 ## 🔥 Where they come from
 
@@ -150,6 +152,17 @@ To "take a quick look at the app", the agent kept pulling windows to the front, 
 After raising a VM's video memory for 3D acceleration, the guest rebooted while Windows Update was installing, and powered off several times along the way, which is normal for updates. The agent took one of those shutdowns as the end of the reboot, never checked the VM's actual state, and decided the video-memory change didn't work. Even after the user said "it's updating right now", it switched to software rendering on its own, dropping the 3D path that was never broken.
 
 **Lesson**: first decide whether a symptom is a final state or a transitional one, and confirm with first-hand evidence. When the user tells you the state, believe them. A fallback lowers the goal, so ask before taking it.
+
+</details>
+
+<details>
+<summary><b>📜 no-blind-script</b>: the character died, and the script kept fighting</summary>
+
+<br>
+
+To test a game, the agent wrote a script that moved, attacked, waited, looted and moved on, as one fixed sequence. Midway through, the character was killed. The script never noticed: it kept sending move and attack commands at the death screen, and every "result" after that point was meaningless.
+
+**Lesson**: deterministic bulk work belongs in one script. A process with surprises needs a precondition check before each key action, a stop-and-report on any unexpected state, or a step-by-step run. When a one-shot script has failed more than once, especially in different places, stop patching it and add checkpoints.
 
 </details>
 

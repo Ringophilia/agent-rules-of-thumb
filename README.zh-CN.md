@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-11-blue.svg)](#-skills-一览)
+[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一览)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安装)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依赖脚本工具箱)
 
@@ -48,6 +48,7 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | 按钮放错地方、入口藏得深、多余的确认和步骤；加用户没要的功能、菜单和入口 | 设计或修改交互、流程、表单、弹窗时；宣布 UI 完成之前 |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自己能跑的命令、能读的文件、能查的报错，却停下来让用户去做 | 准备让用户运行、检查、复制、确认任何东西之前 |
 | ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | 主方案出现一次过渡性的异常，就退到兜底方案（软件渲染、兼容模式、降级实现） | 准备放弃主方案、改用兜底或降级方案之前 |
+| 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 有变数的流程也用一个固定脚本跑到底，默认每一步都按预期发生 | 准备写脚本对会变化的系统执行一长串操作之前；一次性脚本失败两次以上时 |
 
 各条 skill 的**原则是通用的**；示例偏 Windows / PowerShell，因为它们来自 Windows 桌面与虚拟机自动化的实际经历。
 
@@ -66,6 +67,7 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | 摆按钮、设计流程、宣布界面做完了 | 🧭 think-like-the-user |
 | 让用户去运行命令或检查什么 | 🛠️ just-do-it-yourself |
 | 改用兜底或降级方案 | ↩️ dont-fall-back-too-soon |
+| 写脚本从头到尾执行一长串操作 | 📜 no-blind-script |
 
 ## 🔥 它们从哪来
 
@@ -147,6 +149,17 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 给虚拟机调大显存、走 3D 加速。重启时 Windows 正好在装更新，中途关机了好几次，这是更新的正常流程。AI 把其中一次关机当成了重启结束，没有确认虚拟机的实际状态，就断定改显存的方法不可行。用户说了"现在正在更新"，它仍然自行退到软件渲染，放弃了本来没有问题的 3D 路线。
 
 **教训**：先判断现象是终态还是过渡状态，用一手证据确认；用户告诉你的状态优先采信；降级会降低目标，必须先征得用户同意。
+
+</details>
+
+<details>
+<summary><b>📜 no-blind-script</b>：角色死了，脚本还在打怪</summary>
+
+<br>
+
+为了测试游戏，AI 写了一个自动打怪脚本：移动、攻击、等待、捡东西、去下一处，一个固定的动作序列。中途角色被怪打死，脚本完全不知道，继续对着死亡画面发送移动和攻击指令，之后的所有"测试结果"都没有意义。
+
+**教训**：确定的批量操作用一个脚本跑完；有变数的流程要在关键动作前检查前置条件，遇到意外状态就停下报告，或者改成分步执行。一次性脚本失败两次以上（尤其每次失败的地方不同），就别再修修补补，先加检查点。
 
 </details>
 

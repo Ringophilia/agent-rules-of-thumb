@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-11-blue.svg)](#-skills-一覧)
+[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一覧)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-インストール)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-依存ゼロのスクリプト集)
 
@@ -48,6 +48,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | ボタンの配置が不自然、入口が深い、不要な確認や手順が多い、頼まれていない機能・メニュー・入口を足す | 操作・フロー・フォーム・ダイアログを設計・変更するとき、UI 完成と言う前 |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自分で実行できるコマンド、読めるファイル、調べられるエラーなのに、止まってユーザーにやらせる | ユーザーに実行・確認・コピー・承認を頼む前 |
 | ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | 一時的な状態にすぎない異常を一度見ただけで、フォールバック（ソフトウェアレンダリング、互換モード、機能縮小）に退く | 本来の方針を捨ててフォールバックや機能縮小に切り替える前 |
+| 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 不確定要素のある処理も固定スクリプトで最後まで流し、各ステップが想定どおりに起きたとみなす | 変化するシステムに対して長い操作列をスクリプト化する前、使い切りスクリプトが 2 回以上失敗したとき |
 
 各 skill の**原則はプラットフォームに依存しません**。例が Windows / PowerShell 寄りなのは、Windows デスクトップと仮想マシンの自動化で実際に起きた出来事が元になっているからです。
 
@@ -69,6 +70,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | ボタンを配置する、フローを設計する、UI 完成と言う | 🧭 think-like-the-user |
 | ユーザーにコマンド実行や確認を頼む | 🛠️ just-do-it-yourself |
 | フォールバックや機能縮小に切り替える | ↩️ dont-fall-back-too-soon |
+| 長い操作列を最初から最後までスクリプトで流す | 📜 no-blind-script |
 
 ## 🔥 それぞれの由来
 
@@ -150,6 +152,17 @@ AI エージェントが失敗する理由は「できないから」より、�
 3D アクセラレーションのために VM のビデオメモリを増やして再起動したところ、ちょうど Windows Update の適用中で、途中で何度か電源が切れた。これは更新の正常な流れだ。AI はそのうちの 1 回を再起動の終わりとみなし、VM の実際の状態を確かめないまま「ビデオメモリの変更は効かない」と判断した。ユーザーが「今更新中」と伝えても、自分の判断でソフトウェアレンダリングに切り替え、問題のなかった 3D の方針を捨ててしまった。
 
 **教訓**：その現象が最終状態か過渡的な状態かをまず見極め、一次証拠で確かめる。ユーザーが状態を教えてくれたらそれを信じる。フォールバックは目標を下げることなので、先にユーザーの同意を得る。
+
+</details>
+
+<details>
+<summary><b>📜 no-blind-script</b>：キャラクターが死んでも、スクリプトは戦い続けた</summary>
+
+<br>
+
+ゲームのテストのため、AI は移動・攻撃・待機・アイテム回収・次の地点へ、という固定の操作列を自動で繰り返すスクリプトを書いた。途中でキャラクターが倒されたが、スクリプトは気づかず、死亡画面に向かって移動と攻撃の命令を送り続けた。それ以降の「テスト結果」はすべて無意味になった。
+
+**教訓**：確定的な一括処理は 1 本のスクリプトで流してよい。不確定要素のある処理では、重要な操作の前に前提条件を確認し、想定外の状態なら止まって報告するか、1 ステップずつ実行する。使い切りスクリプトが 2 回以上、特に毎回違う場所で失敗したら、継ぎはぎをやめてチェックポイントを入れる。
 
 </details>
 

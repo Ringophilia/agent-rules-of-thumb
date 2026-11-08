@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-11-blue.svg)](#-skills-一覽)
+[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一覽)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安裝)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依賴腳本工具箱)
 
@@ -48,6 +48,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | 按鈕放錯地方、入口藏得深、多餘的確認和步驟；加使用者沒要的功能、選單和入口 | 設計或修改互動、流程、表單、對話框時；宣布 UI 完成之前 |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自己能跑的指令、能讀的檔案、能查的錯誤，卻停下來讓使用者去做 | 準備讓使用者執行、檢查、複製、確認任何東西之前 |
 | ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | 主方案出現一次過渡性的異常，就退到備援方案（軟體算繪、相容模式、降級實作） | 準備放棄主方案、改用備援或降級方案之前 |
+| 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 有變數的流程也用一個固定腳本跑到底，預設每一步都照預期發生 | 準備寫腳本對會變化的系統執行一長串操作之前；一次性腳本失敗兩次以上時 |
 
 各條 skill 的**原則是通用的**；範例偏 Windows / PowerShell，因為它們來自 Windows 桌面與虛擬機自動化的實際經歷。
 
@@ -69,6 +70,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 擺按鈕、設計流程、宣布介面做完了 | 🧭 think-like-the-user |
 | 讓使用者去執行指令或檢查什麼 | 🛠️ just-do-it-yourself |
 | 改用備援或降級方案 | ↩️ dont-fall-back-too-soon |
+| 寫腳本從頭到尾執行一長串操作 | 📜 no-blind-script |
 
 ## 🔥 它們從哪來
 
@@ -150,6 +152,17 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 為虛擬機調大顯示記憶體、走 3D 加速。重新開機時 Windows 正好在安裝更新，中途關機了好幾次，這是更新的正常流程。AI 把其中一次關機當成了重新開機結束，沒有確認虛擬機的實際狀態，就斷定調整顯示記憶體的方法不可行。使用者說了「現在正在更新」，它仍然自行退到軟體算繪，放棄了本來沒有問題的 3D 路線。
 
 **教訓**：先判斷現象是終態還是過渡狀態，用第一手證據確認；使用者告訴你的狀態優先採信；降級會降低目標，必須先徵得使用者同意。
+
+</details>
+
+<details>
+<summary><b>📜 no-blind-script</b>：角色死了，腳本還在打怪</summary>
+
+<br>
+
+為了測試遊戲，AI 寫了一個自動打怪腳本：移動、攻擊、等待、撿東西、去下一處，一個固定的動作序列。中途角色被怪打死，腳本完全不知道，繼續對著死亡畫面送出移動和攻擊指令，之後的所有「測試結果」都沒有意義。
+
+**教訓**：確定的批次操作用一個腳本跑完；有變數的流程要在關鍵動作前檢查前置條件，遇到意外狀態就停下回報，或者改成分步執行。一次性腳本失敗兩次以上（尤其每次失敗的地方不同），就別再修修補補，先加檢查點。
 
 </details>
 
