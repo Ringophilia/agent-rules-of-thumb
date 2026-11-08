@@ -1,135 +1,138 @@
 <div align="center">
 
+**English** | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [日本語](README.ja.md)
+
 # Agent Rules of Thumb
 
-**让 AI 智能体少走弯路的经验法则**
+**Battle-tested rules of thumb that keep AI agents off the slow, wrong, and annoying path**
 
-一组从真实翻车现场总结出来的 [Agent Skills](https://agentskills.io)，<br>
-纠正 AI 智能体在自动化、排障、运维中最常见、也最费时间的坏习惯。
-
-*Battle-tested rules of thumb for AI agents, each one distilled from a real failure.*
+A set of [Agent Skills](https://agentskills.io), each one distilled from a real failure,<br>
+that correct the most common and most expensive habits of AI agents doing automation, debugging, and ops work.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-6-blue.svg)](#-skills-一览)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安装)
-[![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依赖脚本工具箱)
+[![Skills](https://img.shields.io/badge/skills-6-blue.svg)](#-the-skills)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-installation)
+[![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-zero-dependency-script-toolbox)
 
-[Skills 一览](#-skills-一览) · [真实案例](#-它们从哪来) · [安装](#-安装) · [脚本工具箱](#-零依赖脚本工具箱) · [贡献](#-贡献)
+[The skills](#-the-skills) · [Where they come from](#-where-they-come-from) · [Installation](#-installation) · [Script toolbox](#-zero-dependency-script-toolbox) · [Contributing](#-contributing)
 
 </div>
 
 ---
 
-## 💡 为什么需要这些
+## 💡 Why
 
-AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
+AI agents rarely fail because they *can't* do something. They fail because of **habits**:
 
-- 顺手用最熟悉的工具，而不是最合适的
-- 随手 `sleep 30`，等一个其实早就结束的任务
-- 进程名查不到就宣布"程序已退出"，可窗口明明还在屏幕上
-- 试了三次失败，就告诉用户"技术上不可行"
-- 截一张全屏、把窗口切到前台，打断正在用电脑的用户
+- Reaching for the most familiar tool instead of the right one
+- Writing `sleep 30` to wait for a task that finished long ago
+- Declaring "the program exited" because a process lookup came back empty, while the window is sitting right there on screen
+- Telling the user "this isn't technically possible" after three failed attempts
+- Taking a full-screen screenshot or pulling a window to the front while the user is trying to work
 
-这些习惯不会让任务立刻失败，只会让它**慢十倍、结论出错、或者把用户晾在一边**。本仓库里的每条 skill 都对应一次真实发生过的事故：先写清楚错在哪，再给出可执行的流程和检查清单。
+None of these make a task fail outright. They make it **ten times slower, reach the wrong conclusion, or leave the user stranded**. Every skill here comes from an incident that actually happened: it spells out what went wrong, then gives a concrete procedure and a checklist.
 
-## 📚 Skills 一览
+## 📚 The skills
 
-| Skill | 纠正的坏习惯 | 什么时候触发 |
+| Skill | The bad habit it fixes | When it kicks in |
 | --- | --- | --- |
-| 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 截全屏、抢焦点、动用户的鼠标键盘；不问就占用用户的桌面 | 截图、启动或调试 GUI 程序、操作程序界面、使用 computer-use 之前 |
-| 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 看不见弹窗就当它不存在；没读内容就点掉；按进程名乱杀 | 点击没反应、程序看似卡死、命令挂住等输入 |
-| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己试了几次失败，就宣布"不可行" | 准备说"走不通 / 不值得做"之前 |
-| ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定时长的 sleep 等结果 | 准备写 sleep 等某件事完成时 |
-| 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | 根据进程名、退出码等间接指标断言状态 | 准备说"已启动 / 已退出 / 已修好"之前 |
-| 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 习惯性地用最熟悉、而不是最合适的工具 | 慢操作、批量操作、跨机操作之前 |
+| 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | Full-screen screenshots, stealing focus, taking over the user's mouse and keyboard without asking | Before screenshots, launching or debugging GUI apps, driving an app's UI, or using computer-use |
+| 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | Assuming an unseen dialog doesn't exist; dismissing it without reading it; killing processes by name | A click does nothing, an app looks frozen, a command hangs waiting for input |
+| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | Declaring something "impossible" after a few personal attempts | Before saying "this won't work" or "not worth it" |
+| ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | Waiting for results with fixed-length sleeps | When about to write a sleep to wait for something |
+| 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | Asserting state from indirect signals like process names and exit codes | Before saying "it started / it exited / it's fixed" |
+| 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | Using the most familiar tool instead of the most suitable one | Before slow, bulk, repetitive, or cross-machine operations |
 
-各条 skill 的**原则是通用的**；示例偏 Windows / PowerShell，因为它们来自 Windows 桌面与虚拟机自动化的实际经历。
+The **principles are platform-agnostic**. The examples lean toward Windows / PowerShell because that's where the incidents happened: Windows desktop and virtual-machine automation.
 
-### 速查：智能体正准备……
+> [!NOTE]
+> The skill files are currently written in Chinese. Modern LLM agents follow them fine whatever language you talk to them in. Translations are welcome; see [Contributing](#-contributing).
 
-| 正准备…… | 先读 |
+### Quick reference: the agent is about to…
+
+| About to… | Read first |
 | --- | --- |
-| 截图、开 GUI、点界面 | 🫥 background-friendly |
-| 说"已完成 / 已退出 / 已修好" | 📸 screenshot-first |
-| 写 `sleep` 等结果 | ⏱️ no-blind-wait |
-| 说"做不到 / 不值得" | 🔍 never-give-up-early |
-| 跑一个慢的、批量的、跨机的操作 | 🚀 think-about-faster-path |
-| 面对"点了没反应 / 卡住了" | 🪟 dialog-handling |
+| Take a screenshot, open a GUI, click through an interface | 🫥 background-friendly |
+| Say "done / it exited / it's fixed" | 📸 screenshot-first |
+| Write a `sleep` to wait for a result | ⏱️ no-blind-wait |
+| Say "can't be done / not worth it" | 🔍 never-give-up-early |
+| Run something slow, bulk, or cross-machine | 🚀 think-about-faster-path |
+| Face "the click did nothing / it's stuck" | 🪟 dialog-handling |
 
-## 🔥 它们从哪来
+## 🔥 Where they come from
 
-每条 skill 都源自一次具体的事故。点开看看当时发生了什么：
+Each skill traces back to one specific incident. Expand to see what happened:
 
 <details>
-<summary><b>🚀 think-about-faster-path</b>：同一个文件，换个命令快了 20 倍</summary>
+<summary><b>🚀 think-about-faster-path</b>: same file, 20× faster with a different command</summary>
 
 <br>
 
-要在两台机器之间传一个 44.4 MB 的文件，顺手用了 Windows PowerShell 5.1 的 `Invoke-WebRequest`，结果要几十秒，有时直接超时。换成 `curl.exe` 之后只用了 **1.9 秒**。
+A 44.4 MB file needed to move between two machines. The agent reached for Windows PowerShell 5.1's `Invoke-WebRequest`: tens of seconds, sometimes a timeout. Switching to `curl.exe` took **1.9 seconds**.
 
-根因是 5.1 的进度条渲染会把下载拖慢几十倍。而且在 PowerShell 5.1 里，`curl` 其实是 `Invoke-WebRequest` 的别名。
+The root cause: 5.1's progress-bar rendering slows downloads by an order of magnitude. And in PowerShell 5.1, `curl` is an alias for `Invoke-WebRequest`.
 
-**教训**：更好的工具一直都知道，只是动手前没做比较。
+**Lesson**: the better tool was known all along. The comparison just never happened before acting.
 
 </details>
 
 <details>
-<summary><b>⏱️ no-blind-wait</b>：10 秒的活，等了 100 多秒</summary>
+<summary><b>⏱️ no-blind-wait</b>: a 10-second job that waited 100+ seconds</summary>
 
 <br>
 
-任务脚本里 `Start-Sleep 50`，调度端又 `Start-Sleep 54`。可那个远程调用本身就是同步的：返回时任务早就做完了。时间全浪费了，出错时也只看到一个"超时"，不知道卡在哪一步。
+The task script ran `Start-Sleep 50`, then the orchestrator ran `Start-Sleep 54` on top. But the remote call was synchronous: by the time it returned, the job was already done. All that time was wasted, and when something did fail, all you got was "timeout", with no idea which step was stuck.
 
-**教训**：先看调用是不是同步的；需要轮询时，"条件 + 间隔 + 总超时 + 超时后做什么"缺一不可；长流程要打阶段标记。
+**Lesson**: check whether the call is synchronous first. When you must poll, you need all four: condition, interval, overall timeout, and what to do on timeout. Mark phases in long pipelines.
 
 </details>
 
 <details>
-<summary><b>📸 screenshot-first</b>：进程"不存在"，窗口却在屏幕中央</summary>
+<summary><b>📸 screenshot-first</b>: the process "didn't exist", but the window was in the middle of the screen</summary>
 
 <br>
 
-按名字查进程返回空，`MainWindowTitle` 也是空的，于是判断程序"已退出"。截图一看，窗口就在屏幕中央等人去点。原来运行时把映像名改成了一串数字。
+A lookup by process name came back empty and `MainWindowTitle` was blank, so the program was declared "exited". A screenshot showed the window right in the middle of the screen, waiting for a click. The runtime had renamed its image to a string of digits.
 
-**教训**：进程名、退出码、状态字段都是间接指标。和一手证据冲突时，信一手证据，并追查间接指标为什么说错了。
+**Lesson**: process names, exit codes, and status fields are indirect signals. When they disagree with first-hand evidence, trust the evidence, then find out why the indirect signal lied.
 
 </details>
 
 <details>
-<summary><b>🪟 dialog-handling</b>：被反复关掉的弹窗，正是出路</summary>
+<summary><b>🪟 dialog-handling</b>: the dialog that kept getting closed was the way out</summary>
 
 <br>
 
-一个反复出现的「您确认要解绑吗？」被当成噪声，关了一次又一次。实际上账号绑在旧机器上，正是它导致登录失败；点「确定」解绑之后，流程立刻就通了。
+An "Are you sure you want to unbind?" dialog kept popping up and kept being dismissed as noise. In fact, the account being bound to an old machine was exactly why login failed. Clicking "OK" to unbind made the whole flow work.
 
-**教训**：先读弹窗内容，再判断它是障碍还是入口；如果入口是不可逆操作，先问用户。
+**Lesson**: read the dialog before handling it, and decide whether it's an obstacle or the entrance. If the entrance is irreversible, ask the user first.
 
 </details>
 
 <details>
-<summary><b>🔍 never-give-up-early</b>：判了"死刑"的问题，30 分钟就解决了</summary>
+<summary><b>🔍 never-give-up-early</b>: a "dead end" solved in 30 minutes</summary>
 
 <br>
 
-为了让一个商用软件在虚拟机里启动，自己改了十几项配置，全部失败，于是得出结论："检测层次太深，不值得继续。"用户反问：只凭一篇转载帖和一轮尝试就下结论，调研太少了。随后开了 4 路独立调研，其中一路找到了现成的开源驱动，**前后 30 分钟**解决。
+Trying to get a commercial program to start inside a VM, the agent tweaked over a dozen settings, all failed, and it concluded: "the detection runs too deep; not worth continuing." The user pushed back: one reposted article and one round of attempts isn't research. Four independent research threads followed. One of them found an existing open-source driver, and the problem was solved **within 30 minutes**.
 
-**教训**：你试过的只是全部方案里很小的一块。说"不行"之前，要拿出具体的排除证据和查过的来源。
+**Lesson**: what you've tried is a tiny slice of the solution space. Before saying "no", produce concrete evidence of what was ruled out and which sources were checked.
 
 </details>
 
 <details>
-<summary><b>🫥 background-friendly</b>：AI 在调试，用户却没法用电脑</summary>
+<summary><b>🫥 background-friendly</b>: the AI was debugging and the user couldn't use their computer</summary>
 
 <br>
 
-为了"看一眼程序现在什么样"，智能体把窗口切到前台截全屏、移动鼠标去点按钮，用户手上的工作一次次被打断，截图里还带上了用户屏幕上的其他内容。
+To "take a quick look at the app", the agent kept pulling windows to the front, taking full-screen screenshots, and moving the mouse to click buttons. The user's work was interrupted again and again, and the screenshots captured whatever else was on their screen.
 
-**改进后**：只截目标窗口，被遮挡甚至最小化的窗口也能截，而且不抢焦点；程序以最小化、不激活的方式启动；用 UI Automation 在后台点按钮、填文本。确实必须占用桌面时，**先请求批准，没批准就暂停**。
+**After**: capture only the target window, even a covered or minimized one, without stealing focus. Launch apps minimized and not activated. Click buttons and fill text boxes in the background through UI Automation. When the desktop truly has to be used, **ask for approval first, and pause if it isn't given**.
 
 </details>
 
-## 📦 安装
+## 📦 Installation
 
 ### Claude Code
 
@@ -137,9 +140,9 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 git clone https://github.com/Ringophilia/agent-rules-of-thumb.git
 cd agent-rules-of-thumb
 
-# 对所有项目生效
+# Available in every project
 mkdir -p ~/.claude/skills && cp -r skills/* ~/.claude/skills/
-# 或者只对当前项目生效（在你的项目根目录执行）
+# Or only in one project (run from that project's root)
 mkdir -p .claude/skills && cp -r /path/to/agent-rules-of-thumb/skills/* .claude/skills/
 ```
 
@@ -154,77 +157,79 @@ Copy-Item -Recurse -Force agent-rules-of-thumb\skills\* "$HOME\.claude\skills\"
 
 </details>
 
-可以只挑需要的 skill 复制。装好后开一个新会话即可生效。
+Feel free to copy only the skills you want. They take effect in the next new session.
 
 > [!TIP]
-> Skill 是否被加载，取决于智能体自己判断 `description` 和当前任务是否匹配。如果希望某条规则**始终生效**，可以在全局 `~/.claude/CLAUDE.md` 里加一行，例如：
+> Whether a skill gets loaded depends on the agent matching its `description` to the task at hand. To make a rule **always on**, add a line to your global `~/.claude/CLAUDE.md`, for example:
 >
 > ```markdown
-> - 截图、启动或调试 GUI 程序、使用 computer-use 之前，先读 background-friendly skill 并照做。
+> - Before taking screenshots, launching or debugging GUI apps, or using computer-use, read the background-friendly skill and follow it.
 > ```
 
-### 其他支持 Agent Skills 标准的智能体
+### Other agents that support Agent Skills
 
-把 skill 目录放到对应工具的 skills 目录，具体位置见该工具的文档。
+Put the skill directories in that tool's skills directory; see its documentation for the location.
 
-### 不支持 skills 的工具
+### Tools without skills support
 
-把 `SKILL.md` 的正文（去掉开头两个 `---` 之间的部分）粘贴进系统提示词或规则文件即可。这些原则本身不依赖任何特定平台。
+Paste the body of `SKILL.md` (everything after the frontmatter between the two `---` lines) into the system prompt or rules file. The principles don't depend on any particular platform.
 
-## 🧰 零依赖脚本工具箱
+## 🧰 Zero-dependency script toolbox
 
-两条 skill 附带可直接运行的 Windows 脚本，**只依赖系统自带的 PowerShell 5.1 和 .NET Framework**，不需要安装任何东西。
+Two of the skills ship ready-to-run Windows scripts that **only need the PowerShell 5.1 and .NET Framework that come with Windows**. Nothing to install.
 
-| 需求 | 脚本 | 打扰用户？ |
+| Need | Script | Disturbs the user? |
 | --- | --- | :---: |
-| 找被遮挡或隐藏的 Win32 对话框，读出子控件的文字和 ID | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | 否 |
-| 点击 Win32 对话框按钮（WM_COMMAND，不需要激活窗口） | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | 否 |
-| 截单个窗口（被遮挡或最小化都行，不抢焦点） | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | 否 |
-| 以最小化、不激活的方式启动程序，输出写到日志 | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | 否 |
-| 用 UI Automation 在后台读控件树、点按钮、填文本、勾选 | [`background-friendly/scripts/uia.ps1`](skills/background-friendly/scripts/uia.ps1) | 否 |
-| 真实鼠标键盘输入，结束后还原前台窗口和鼠标位置 | [`background-friendly/scripts/desktop-input.ps1`](skills/background-friendly/scripts/desktop-input.ps1) | ⚠️ 需用户批准 |
+| Find covered or hidden Win32 dialogs; read their controls' text and IDs | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | No |
+| Press a Win32 dialog button (WM_COMMAND, no activation needed) | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | No |
+| Capture a single window, even covered or minimized, without stealing focus | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | No |
+| Launch a program minimized and not activated, logging its output | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | No |
+| Read the control tree, click buttons, set text, toggle checkboxes via UI Automation | [`background-friendly/scripts/uia.ps1`](skills/background-friendly/scripts/uia.ps1) | No |
+| Real mouse/keyboard input, then restore the foreground window and cursor | [`background-friendly/scripts/desktop-input.ps1`](skills/background-friendly/scripts/desktop-input.ps1) | ⚠️ Needs approval |
 
 ```powershell
-# 例：在后台截一个最小化的窗口，然后给它的文本框填值、点按钮，全程不抢焦点
+# Example: capture a minimized window, then fill its text box and press a button,
+# all in the background, without stealing focus
 .\capture-window.ps1 -Title "My App" -Out shot.png
 .\uia.ps1 -Title "My App" -ControlType Edit -SetValue "hello"
 .\uia.ps1 -Title "My App" -Name "OK" -Invoke
 ```
 
 > [!NOTE]
-> `uia.ps1` 首次运行时会用 Windows 自带的 `csc.exe` 把 `uia.cs` 编译成 `uia.exe`。原因是在 Windows PowerShell 里，托管 UIA 客户端加载不了 Win32 控件的代理，所有控件都只显示成没有 Pattern 的 `Pane`。所有脚本都保持纯 ASCII，以避开 PowerShell 5.1 按 ANSI 码页读取无 BOM UTF-8 脚本时出现的乱码问题。
+> On first run, `uia.ps1` compiles `uia.cs` into `uia.exe` with the `csc.exe` that ships with Windows. Inside Windows PowerShell, the managed UIA client can't load the Win32 control proxies, so every control shows up as a bare `Pane` with no patterns. All scripts are pure ASCII to avoid PowerShell 5.1 misreading BOM-less UTF-8 scripts with the ANSI code page.
 
-## 🧱 Skill 的结构
+## 🧱 Skill anatomy
 
-遵循 [Agent Skills](https://agentskills.io) 开放标准：每个 skill 是一个目录，入口是 `SKILL.md`。
+Follows the [Agent Skills](https://agentskills.io) open standard: each skill is a directory whose entry point is `SKILL.md`.
 
 ```
 skills/
   <skill-name>/
-    SKILL.md        # YAML frontmatter（name + description）+ Markdown 正文
-    scripts/        # 可选：skill 里引用的可执行脚本
+    SKILL.md        # YAML frontmatter (name + description) + Markdown body
+    scripts/        # optional: executable scripts referenced by the skill
 ```
 
-`description` 是智能体决定"要不要加载这个 skill"的唯一依据，所以里面同时写了**做什么**和**什么时候用**。
+The `description` is the only thing the agent sees when deciding whether to load a skill, so each one states both **what it does** and **when to use it**.
 
-每条 skill 的正文大致按同一个结构组织：
+Each skill body follows roughly the same structure:
 
-1. **反面案例**：真实发生的事故，错在哪
-2. **触发信号**：发现自己正要做什么、说什么时，就该停下来
-3. **正确做法**：可执行的步骤、命令、代码
-4. **边界**：什么时候规则不适用，什么时候该停下来问用户
-5. **检查清单**：动手前或宣布完成前逐项过一遍
+1. **The failure**: a real incident and what went wrong
+2. **Trigger signals**: what you catch yourself about to do or say that should make you stop
+3. **The right way**: concrete steps, commands, and code
+4. **Boundaries**: when the rule doesn't apply, and when to stop and ask the user
+5. **Checklist**: run through it before acting or before declaring done
 
-## 🤝 贡献
+## 🤝 Contributing
 
-欢迎提 Issue 和 PR，尤其欢迎这几类：
+Issues and PRs are welcome, especially:
 
-- **新的翻车案例**：你的智能体反复犯的某个错，附上当时的现场（命令、输出、截图）
-- **其他平台的示例**：macOS / Linux 下的等价做法和脚本
-- **反例**：某条规则在你的场景里给出了错误的指导
+- **New failure cases**: a mistake your agent keeps making, with the evidence (commands, output, screenshots)
+- **Other platforms**: macOS / Linux equivalents and scripts
+- **Counterexamples**: a rule that gave the wrong guidance in your situation
+- **Translations**: of the skills themselves or of this README
 
-新增 skill 时请保持这几个约定：从真实案例出发；`description` 写清"做什么 + 什么时候用"；正文给出可执行的步骤而不是口号；脚本零依赖、纯 ASCII。
+When adding a skill, please keep these conventions: start from a real incident; make the `description` say "what it does + when to use it"; give actionable steps, not slogans; keep scripts dependency-free and pure ASCII.
 
-## 📄 许可
+## 📄 License
 
 [MIT](LICENSE) © 2026 Ringophilia
