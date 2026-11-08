@@ -11,7 +11,7 @@ that correct the most common and most expensive habits of AI agents doing automa
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-10-blue.svg)](#-the-skills)
+[![Skills](https://img.shields.io/badge/skills-11-blue.svg)](#-the-skills)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-installation)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-zero-dependency-script-toolbox)
 
@@ -47,6 +47,7 @@ None of these make a task fail outright. They make it **ten times slower, reach 
 | 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | The same "AI look" everywhere: glassmorphism, purple gradients and neon on a business tool; a fun app made dull and grey | Before designing or styling any UI |
 | 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | Buttons in odd places, buried entry points, needless confirmations and extra steps; features, menus, and entry points nobody asked for | Designing or changing interactions, flows, forms, and dialogs; before calling UI work done |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | Stopping to ask the user to run a command, open a file, or paste an error it could handle itself | Before asking the user to run, check, copy, or confirm anything |
+| ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | Retreating to a fallback (software rendering, compatibility mode, a downgrade) after one odd symptom that was only a transitional state | Before abandoning the main approach for a fallback or downgrade |
 
 The **principles are platform-agnostic**. The examples lean toward Windows / PowerShell because that's where the incidents happened: Windows desktop and virtual-machine automation.
 
@@ -67,6 +68,7 @@ The **principles are platform-agnostic**. The examples lean toward Windows / Pow
 | Pick colours, fonts, and effects for a UI | 🎨 style-fits-the-job |
 | Place buttons, design a flow, or say the UI is done | 🧭 think-like-the-user |
 | Ask the user to run a command or check something | 🛠️ just-do-it-yourself |
+| Switch to a fallback or downgraded approach | ↩️ dont-fall-back-too-soon |
 
 ## 🔥 Where they come from
 
@@ -137,6 +139,17 @@ Trying to get a commercial program to start inside a VM, the agent tweaked over 
 To "take a quick look at the app", the agent kept pulling windows to the front, taking full-screen screenshots, and moving the mouse to click buttons. The user's work was interrupted again and again, and the screenshots captured whatever else was on their screen.
 
 **After**: capture only the target window, even a covered or minimized one, without stealing focus. Launch apps minimized and not activated. Click buttons and fill text boxes in the background through UI Automation. When the desktop truly has to be used, **ask for approval first, and pause if it isn't given**.
+
+</details>
+
+<details>
+<summary><b>↩️ dont-fall-back-too-soon</b>: an update reboot taken as proof that 3D acceleration "doesn't work"</summary>
+
+<br>
+
+After raising a VM's video memory for 3D acceleration, the guest rebooted while Windows Update was installing, and powered off several times along the way, which is normal for updates. The agent took one of those shutdowns as the end of the reboot, never checked the VM's actual state, and decided the video-memory change didn't work. Even after the user said "it's updating right now", it switched to software rendering on its own, dropping the 3D path that was never broken.
+
+**Lesson**: first decide whether a symptom is a final state or a transitional one, and confirm with first-hand evidence. When the user tells you the state, believe them. A fallback lowers the goal, so ask before taking it.
 
 </details>
 

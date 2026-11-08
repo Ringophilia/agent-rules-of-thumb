@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-10-blue.svg)](#-skills-一覧)
+[![Skills](https://img.shields.io/badge/skills-11-blue.svg)](#-skills-一覧)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-インストール)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-依存ゼロのスクリプト集)
 
@@ -47,6 +47,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 場面を問わず「AI っぽい」見た目：業務ツールにすりガラス・紫青グラデーション・ネオン、娯楽アプリは逆に味気ない | UI のデザインやスタイリングを始める前 |
 | 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | ボタンの配置が不自然、入口が深い、不要な確認や手順が多い、頼まれていない機能・メニュー・入口を足す | 操作・フロー・フォーム・ダイアログを設計・変更するとき、UI 完成と言う前 |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自分で実行できるコマンド、読めるファイル、調べられるエラーなのに、止まってユーザーにやらせる | ユーザーに実行・確認・コピー・承認を頼む前 |
+| ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | 一時的な状態にすぎない異常を一度見ただけで、フォールバック（ソフトウェアレンダリング、互換モード、機能縮小）に退く | 本来の方針を捨ててフォールバックや機能縮小に切り替える前 |
 
 各 skill の**原則はプラットフォームに依存しません**。例が Windows / PowerShell 寄りなのは、Windows デスクトップと仮想マシンの自動化で実際に起きた出来事が元になっているからです。
 
@@ -67,6 +68,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | UI の配色・フォント・エフェクトを選ぶ | 🎨 style-fits-the-job |
 | ボタンを配置する、フローを設計する、UI 完成と言う | 🧭 think-like-the-user |
 | ユーザーにコマンド実行や確認を頼む | 🛠️ just-do-it-yourself |
+| フォールバックや機能縮小に切り替える | ↩️ dont-fall-back-too-soon |
 
 ## 🔥 それぞれの由来
 
@@ -137,6 +139,17 @@ AI エージェントが失敗する理由は「できないから」より、�
 「アプリが今どうなっているかちょっと見る」ために、エージェントはウィンドウを最前面に出して全画面を撮り、マウスを動かしてボタンを押していました。ユーザーの作業は何度も中断され、スクリーンショットには画面上のほかの内容まで写り込んでいました。
 
 **改善後**：対象のウィンドウだけを撮る。隠れていても最小化されていても撮れて、フォーカスも奪わない。アプリは最小化・非アクティブの状態で起動する。UI Automation でボタン操作やテキスト入力をバックグラウンドで行う。どうしてもデスクトップを使う必要があるときは、**先に許可を求め、許可がなければ一時停止する**。
+
+</details>
+
+<details>
+<summary><b>↩️ dont-fall-back-too-soon</b>：更新中の再起動を「3D アクセラレーションは無理」の証拠にした</summary>
+
+<br>
+
+3D アクセラレーションのために VM のビデオメモリを増やして再起動したところ、ちょうど Windows Update の適用中で、途中で何度か電源が切れた。これは更新の正常な流れだ。AI はそのうちの 1 回を再起動の終わりとみなし、VM の実際の状態を確かめないまま「ビデオメモリの変更は効かない」と判断した。ユーザーが「今更新中」と伝えても、自分の判断でソフトウェアレンダリングに切り替え、問題のなかった 3D の方針を捨ててしまった。
+
+**教訓**：その現象が最終状態か過渡的な状態かをまず見極め、一次証拠で確かめる。ユーザーが状態を教えてくれたらそれを信じる。フォールバックは目標を下げることなので、先にユーザーの同意を得る。
 
 </details>
 
