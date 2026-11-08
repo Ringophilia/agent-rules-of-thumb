@@ -1,6 +1,6 @@
 ---
 name: think-about-faster-path
-description: "Before an operation that takes more than ~10 seconds or is repeated, bulk or cross-machine, spend ten seconds comparing paths: skip it, a native tool, parallelism, one batch call, processing where the data lives. The habitual tool is often an order of magnitude slower. Use before transfers, bulk file work, looped remote or API calls, and whenever a step is much slower than expected."
+description: "Before an operation that takes more than ~10 seconds, moves a large file (~100 MB+), or is repeated, bulk or cross-machine, spend ten seconds comparing paths: skip it, a native tool, parallelism, one batch call, processing where the data lives. The habitual or built-in tool is often an order of magnitude slower; an environment's own copy command (VM guest copy, docker cp, adb pull, remote-shell upload) is usually a slow control channel, so move big data over the network instead. Use before transfers, bulk file work, looped remote or API calls, and whenever a step is much slower than expected."
 ---
 
 # 先想有没有更快的做法
@@ -42,6 +42,7 @@ size=46571520  speed=24356572 B/s  time=1.912s
 | 任务 | 慢 | 快 |
 | --- | --- | --- |
 | HTTP 下载 | PS 5.1 的 `Invoke-WebRequest`（带进度条） | `curl.exe -L -o`；或者先关掉进度条 |
+| 跨机器 / 跨环境传大文件 | 环境自带的拷贝命令：虚拟机的 guest 拷贝（`vmrun copyFileFromGuestToHost`、`Copy-VMFile`）、`docker cp`、`adb pull`、WinRM `Copy-Item -ToSession`。它们是给小文件和控制命令设计的管理通道，大文件很慢 | 走网络数据通道：一端 `python -m http.server`，另一端 `curl.exe`；SMB 共享；`scp` / `rsync`。能压缩的先压缩，传完校验哈希 |
 | 大量小文件复制 | `Copy-Item` 循环 | `robocopy src dst /E /MT:16`；`rsync -a` |
 | 文本搜索 | `Select-String` 递归、逐个文件读取 | `rg`（ripgrep） |
 | 批量解压 | `Expand-Archive` 循环 | `7z x "*.zip" -o*` 一次处理 |
@@ -112,6 +113,7 @@ time <方法A 处理 100 条>
 - [ ] 能不能不做，或者只做需要的那一部分
 - [ ] 有没有原生命令行工具可以替代
 - [ ] 预估耗时超过 10 秒吗？超过就先想替代方案
+- [ ] 大文件先算一下：数据量 ÷ 通道速度。不知道速度，就拿一个小样本（如 50 MB）测一次再推算
 - [ ] 能不能一次做完，而不是循环
 - [ ] 能不能并行？有没有不该并行的理由
 - [ ] 不确定时，用小样本量过了吗

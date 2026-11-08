@@ -11,7 +11,7 @@
 - **Do it yourself**: don't ask the user to run a command, read a file or check a log that your own tools can handle. (just-do-it-yourself)
 - **Maybe it was the user**: when a window disappears, a file changes or a process exits, check exit codes and logs first; if it looks like the user, ask before debugging or overwriting. (maybe-it-was-the-user)
 - **Read the dialog**: when a click does nothing, an app looks frozen, or a command hangs without output, look for the dialog or prompt blocking it and read it before acting. (dialog-handling)
-- **Compare paths first**: for anything slow (>10 s), bulk or cross-machine, spend ten seconds on native tools, parallelism and batching. (think-about-faster-path)
+- **Compare paths first**: for anything slow (>10 s), bulk or cross-machine, spend ten seconds on native tools, parallelism and batching. Move big files over the network, not through an environment's own copy command (VM guest copy, docker cp, adb pull); time a small sample first. (think-about-faster-path)
 - **Scripts need checkpoints**: against changing systems (GUIs, games, installers, web flows), check preconditions before key steps and stop on surprises. (no-blind-script)
 - **Encoding first**: before writing non-ASCII text, pick the encoding for the reader: .ps1 for PowerShell 5.1 is pure ASCII or UTF-8 with BOM; .bat, .sh and JSON have no BOM. (encoding-first)
 - **Style fits the job**: tools stay restrained and clear, entertainment can go bold; no default glassmorphism, purple-blue gradients, neon or emoji icons. (style-fits-the-job)

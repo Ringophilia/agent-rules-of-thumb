@@ -69,6 +69,7 @@ capture-window.ps1 -Hwnd 0x30C9E -Out "<scratchpad>\shot.png"
 capture-window.ps1 -ProcessName MyApp -Burst 6 -IntervalMs 300 -Out "<s>\burst.png"
 ```
 
+- 要对比这些帧，**拼成一张带标签的网格再看**，不要一张张打开（见 compare-in-one-image；JSON 里的 `labels` 可以直接当每格的标签）。
 - 连拍是为了**观察过程**，不是为了等待完成。等某件事完成，用条件判断（见 no-blind-wait），完成后再截一张。
 - 要给 `desktop-input.ps1` **量坐标**，在单张原图上量。
 

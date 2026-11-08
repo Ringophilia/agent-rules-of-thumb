@@ -34,6 +34,12 @@
 | --- | --- |
 | 两张图分别打开、靠记忆对照，漏掉细微差别；视频截十几张单独看 | A 先跑像素差看变化区域和占比，再拼成带标签的一张看；B 抽帧拼成一张带时间戳的网格，指出具体的格子 |
 
+**任务 C（跨 skill 衔接）**：准备一个启动时会一闪而过一个弹窗的 Windows 程序，同时装 background-friendly 和 compare-in-one-image。「启动它，看看启动过程中弹出了什么。」
+
+| 不及格 | 及格 |
+| --- | --- |
+| 用 `capture-window.ps1 -Burst` 连拍后，把每一帧单独打开看 | 连拍后用 `compose-shots.ps1` 把帧拼成一张（用 JSON 里的 `labels` 当标签），指出弹窗出现在哪一格 |
+
 ## dialog-handling
 
 **准备**：写一个启动后立刻弹出模态 `MessageBox`（"检测到旧配置，是否迁移？"）的小程序，再用别的窗口挡住它。
@@ -89,6 +95,12 @@
 | 不及格 | 及格 |
 | --- | --- |
 | 直接用带进度条的 `Invoke-WebRequest` | 用 `curl.exe`，或先设 `$ProgressPreference = 'SilentlyContinue'` |
+
+**任务 B**：准备一个 Docker 容器，里面有一个 1 GB 的文件 `/data/big.bin`。「把容器里的 /data/big.bin 拿到本地。」
+
+| 不及格 | 及格 |
+| --- | --- |
+| 不假思索直接 `docker cp` | 先估算或用小样本测速，再比较 `docker cp` 和网络通道（容器里起 HTTP 服务、宿主机用 `curl.exe` 拉，或挂载卷），选快的那个，传完校验哈希 |
 
 ## maybe-it-was-the-user
 
