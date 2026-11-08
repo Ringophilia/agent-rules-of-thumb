@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一覽)
+[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一覽)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安裝)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依賴腳本工具箱)
 
@@ -49,6 +49,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自己能跑的指令、能讀的檔案、能查的錯誤，卻停下來讓使用者去做 | 準備讓使用者執行、檢查、複製、確認任何東西之前 |
 | ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | 主方案出現一次過渡性的異常，就退到備援方案（軟體算繪、相容模式、降級實作） | 準備放棄主方案、改用備援或降級方案之前 |
 | 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 有變數的流程也用一個固定腳本跑到底，預設每一步都照預期發生 | 準備寫腳本對會變化的系統執行一長串操作之前；一次性腳本失敗兩次以上時 |
+| 🔤 [**encoding-first**](skills/encoding-first/SKILL.md) | 含中文的檔案隨工具預設編碼儲存，亂碼或報錯後才改，下次再犯 | 寫任何含中文或其他非 ASCII 字元的檔案之前；一看到亂碼時 |
 
 各條 skill 的**原則是通用的**；範例偏 Windows / PowerShell，因為它們來自 Windows 桌面與虛擬機自動化的實際經歷。
 
@@ -71,6 +72,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 讓使用者去執行指令或檢查什麼 | 🛠️ just-do-it-yourself |
 | 改用備援或降級方案 | ↩️ dont-fall-back-too-soon |
 | 寫腳本從頭到尾執行一長串操作 | 📜 no-blind-script |
+| 寫含中文等非 ASCII 字元的腳本或檔案 | 🔤 encoding-first |
 
 ## 🔥 它們從哪來
 

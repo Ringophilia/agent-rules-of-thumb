@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一覧)
+[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一覧)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-インストール)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-依存ゼロのスクリプト集)
 
@@ -49,6 +49,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自分で実行できるコマンド、読めるファイル、調べられるエラーなのに、止まってユーザーにやらせる | ユーザーに実行・確認・コピー・承認を頼む前 |
 | ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | 一時的な状態にすぎない異常を一度見ただけで、フォールバック（ソフトウェアレンダリング、互換モード、機能縮小）に退く | 本来の方針を捨ててフォールバックや機能縮小に切り替える前 |
 | 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 不確定要素のある処理も固定スクリプトで最後まで流し、各ステップが想定どおりに起きたとみなす | 変化するシステムに対して長い操作列をスクリプト化する前、使い切りスクリプトが 2 回以上失敗したとき |
+| 🔤 [**encoding-first**](skills/encoding-first/SKILL.md) | 非 ASCII 文字を含むファイルをツール既定のエンコーディングで保存し、文字化けやエラーが出てから直す。それを何度も繰り返す | 中国語・日本語など非 ASCII 文字を含むファイルを書く前、文字化けに気づいたとき |
 
 各 skill の**原則はプラットフォームに依存しません**。例が Windows / PowerShell 寄りなのは、Windows デスクトップと仮想マシンの自動化で実際に起きた出来事が元になっているからです。
 
@@ -71,6 +72,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | ユーザーにコマンド実行や確認を頼む | 🛠️ just-do-it-yourself |
 | フォールバックや機能縮小に切り替える | ↩️ dont-fall-back-too-soon |
 | 長い操作列を最初から最後までスクリプトで流す | 📜 no-blind-script |
+| 非 ASCII 文字を含むスクリプトやファイルを書く | 🔤 encoding-first |
 
 ## 🔥 それぞれの由来
 
