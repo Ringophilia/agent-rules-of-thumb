@@ -1,6 +1,6 @@
 ---
 name: compare-in-one-image
-description: "When you need to compare several images (before/after, frames over time, design or render variants, several windows, devices or breakpoints, baseline vs current), stitch them into ONE labelled grid and look once, instead of reading them one by one: the comparison is more accurate and costs about one image of tokens. Use whenever you are about to view two or more screenshots, renders or frames to spot a difference or a change. Ships a zero-dependency PowerShell script with a pixel diff; ImageMagick, ffmpeg and PIL equivalents included."
+description: "When you need to compare several images (before/after, frames over time, design or render variants, several windows, devices or breakpoints, baseline vs current), stitch them into ONE labelled grid and look once, instead of reading them one by one: the comparison is more accurate and costs about one image of tokens. Use whenever you are about to view two or more screenshots, renders or frames to spot a difference or a change. Ships a zero-dependency PowerShell script that also diffs a pair or a whole frame sequence (each frame vs the previous); ImageMagick, ffmpeg and PIL equivalents included."
 compatibility: 原则通用；scripts/compose-shots.ps1 需要 Windows + PowerShell 5.1 或更高版本；其他平台用文中的 ImageMagick / ffmpeg / PIL 写法
 ---
 
@@ -52,22 +52,27 @@ powershell -NoProfile -ExecutionPolicy Bypass -File $cs `
 powershell -NoProfile -ExecutionPolicy Bypass -File $cs `
   -Inputs "before.png||after.png" -Diff -Out "<scratchpad>\diff.png" -Title "点击保存之后"
 
+# 序列（连拍、动画帧、步骤截图）：3 张以上加 -Diff，每帧都和前一帧比，变化处画红框
+powershell -NoProfile -ExecutionPolicy Bypass -File $cs -Inputs "<dir>\frames\*.png" -Diff -Out "<scratchpad>\sheet.png"
+
 # 通配符按文件名排序；-Columns 固定列数；-MaxEdge / -MaxPixels 调整输出大小
-powershell -NoProfile -ExecutionPolicy Bypass -File $cs -Inputs "<dir>\frames\*.png" -Out "<scratchpad>\sheet.png"
 ```
 
 脚本输出一行 JSON：输出路径、尺寸、布局、每格缩放比例、估算 token。加了 `-Diff` 时还有：
 
-- `changedPercent`：变化像素占比
-- `changedBoxes`：变化区域，坐标是 after 图的**原始像素坐标**
+- 两张图：`changedPercent`（变化像素占比）、`changedBoxes`（变化区域，after 图的**原始像素坐标**）
+- 三张以上：`steps`，每一步（第 k 帧 → 第 k+1 帧）各有一组 `changedPercent` 和 `changedBoxes`；每格的标签上也写着"vs prev: x%"
 
-**先看数字，再决定要不要看图**：0 个变化区域说明画面根本没变，不用打开图；变化区域落在哪里，也能先猜到是哪个控件变了。
+**先看数字，再决定要不要看图**：0 个变化区域说明画面根本没变，不用打开图；变化区域落在哪里，也能先猜到是哪个控件变了。序列里某一步的变化占比突然变大、或者多出一个区域，往往就是出问题的那一帧。
+
+**不要自己临时写像素比较脚本**。上面这个脚本已经覆盖两张对比和整段序列，临时写的脚本容易在像素格式（24/32 位）、坐标换算上出错，还要多花几轮调试。
 
 ### 其他平台和工具
 
 | 需求 | 写法 |
 | --- | --- |
 | 拼网格（ImageMagick） | `magick montage -label before a.png -label after b.png -tile 2x -geometry 800x600+8+8 -pointsize 24 grid.png`（ImageMagick 6 用 `montage`） |
+| 逐帧差异（ImageMagick） | 对相邻两帧循环执行下一行的 `compare`，先看每一步的数字 |
 | 像素差（ImageMagick） | `magick compare -metric AE before.png after.png diff.png`，变化像素数打印在 stderr，diff.png 里变化处标红 |
 | 视频抽帧拼成一张（ffmpeg） | `ffmpeg -i in.mp4 -vf "fps=2,scale=480:-1,tile=3x2" -frames:v 1 sheet.png`（每 0.5 秒一帧，6 格） |
 | 帧上加时间戳（ffmpeg） | 在 `tile` 前加 `drawtext=text='%{pts\:hms}':x=8:y=8:fontsize=24:fontcolor=white:box=1:boxcolor=black`；Windows 上可能要加 `fontfile='C\:/Windows/Fonts/arial.ttf'` |

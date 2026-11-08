@@ -168,6 +168,19 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 
 </details>
 
+## 📊 實測效果
+
+用 DeepSeek Harness 的無介面模式，同一個任務在裝 skill 和不裝 skill 的情況下各跑 3 次（有一個情境各跑 6 次），每個情境都埋了一個容易踩的坑：
+
+| 情境 | 裝 skill | 不裝 skill |
+| --- | :---: | :---: |
+| 從虛擬機複製 400 MB 檔案，內建的複製指令只有 ~2 MB/s（think-about-faster-path） | 3/3 | 0/3 |
+| 財務內部用的報銷審批列表頁（style-fits-the-job） | 3/3 | 0/3 |
+| README 說 10 秒啟動完成，實際要 15~23 秒（no-blind-wait） | 6/6 | 5/6 |
+| 8 幀裡找出有問題的幀（compare-in-one-image） | 3/3，看 1~3 張圖 | 3/3，看 8~11 張圖 |
+
+另外 7 個 skill 的情境兩組都及格：這個模型本來就會主動反編譯、讀日誌、檢查產物。只測了一個模型，樣本也小，完整資料、方法和局限見 [evals/results.md](evals/results.md)（簡體中文）。
+
 ## 📦 安裝
 
 ### Claude Code
@@ -249,6 +262,8 @@ rules/
   core-rules.md     # 每條 skill 一句話，放進 CLAUDE.md / AGENTS.md 常駐
 evals/
   scenarios.md      # 每條 skill 的可重現測試情境
+  results.md        # 裝與不裝 skill 的實測對比
+  harness/          # 情境產生器和評分腳本
 ```
 
 `description` 是代理決定「要不要載入這個 skill」的唯一依據，而且所有已安裝 skill 的 description 會一直佔著上下文，所以統一用幾句英文寫成：**核心規則 + 什麼時候用**。

@@ -165,6 +165,19 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 
 </details>
 
+## 📊 实测效果
+
+用 DeepSeek Harness 的无界面模式，同一个任务在装 skill 和不装 skill 的情况下各跑 3 次（有一个场景各跑 6 次），每个场景都埋了一个容易踩的坑：
+
+| 场景 | 装 skill | 不装 skill |
+| --- | :---: | :---: |
+| 从虚拟机拷 400 MB 文件，自带的拷贝命令只有 ~2 MB/s（think-about-faster-path） | 3/3 | 0/3 |
+| 财务内部用的报销审批列表页（style-fits-the-job） | 3/3 | 0/3 |
+| README 说 10 秒启动完成，实际要 15~23 秒（no-blind-wait） | 6/6 | 5/6 |
+| 8 帧里找出有问题的帧（compare-in-one-image） | 3/3，看 1~3 张图 | 3/3，看 8~11 张图 |
+
+另外 7 个 skill 的场景两组都及格：这个模型本来就会主动反编译、读日志、检查产物。只测了一个模型，样本也小，完整数据、方法和局限见 [evals/results.md](evals/results.md)。
+
 ## 📦 安装
 
 ### Claude Code
@@ -246,6 +259,8 @@ rules/
   core-rules.md     # 每条 skill 一句话，放进 CLAUDE.md / AGENTS.md 常驻
 evals/
   scenarios.md      # 每条 skill 的可复现测试场景
+  results.md        # 装与不装 skill 的实测对比
+  harness/          # 场景生成器和评分脚本
 ```
 
 `description` 是智能体决定"要不要加载这个 skill"的唯一依据，而且所有已安装 skill 的 description 会一直占着上下文，所以统一用几句英文写成：**核心规则 + 什么时候用**。正文用中文。

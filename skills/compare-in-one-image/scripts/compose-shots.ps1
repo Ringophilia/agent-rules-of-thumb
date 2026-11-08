@@ -250,8 +250,28 @@ $extra = @()
 $result = [ordered]@{}
 try {
   $tiles = $bitmaps; $boxes = $null
-  if ($Diff) {
-    if ($bitmaps.Count -ne 2) { throw '-Diff needs exactly 2 inputs (before, after).' }
+  if ($Diff -and $bitmaps.Count -gt 2) {
+    # sequence mode: every frame is compared with the previous one; boxes drawn on the later frame
+    $boxes = New-Object 'System.Collections.Generic.List[System.Drawing.Rectangle][]' $bitmaps.Count
+    $steps = @()
+    $newLabs = @()
+    for ($k = 0; $k -lt $bitmaps.Count; $k++) {
+      $base = if ($k -lt $labs.Count) { $labs[$k] } else { [IO.Path]::GetFileName($paths[$k]) }
+      if ($k -eq 0) { $newLabs += $base; continue }
+      $pct = 0.0
+      $found = [ShotComposer]::DiffBoxes($bitmaps[$k - 1], $bitmaps[$k], $Threshold, [ref]$pct)
+      $boxes[$k] = $found
+      $newLabs += ('{0}  |  vs prev: {1:N1}%, {2} region(s)' -f $base, $pct, $found.Count)
+      $steps += [ordered]@{
+        from = $k; to = $k + 1; changedPercent = [math]::Round($pct, 2)
+        changedBoxes = @($found | Select-Object -First 8 | ForEach-Object { [ordered]@{ x = $_.X; y = $_.Y; w = $_.Width; h = $_.Height } })
+      }
+    }
+    $labs = $newLabs
+    $result.steps = $steps
+  }
+  elseif ($Diff) {
+    if ($bitmaps.Count -ne 2) { throw '-Diff needs at least 2 inputs.' }
     $pct = 0.0
     $found = [ShotComposer]::DiffBoxes($bitmaps[0], $bitmaps[1], $Threshold, [ref]$pct)
     $hl = [ShotComposer]::Highlight($bitmaps[1], $found); $extra += $hl

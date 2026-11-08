@@ -168,6 +168,19 @@ To test a game, the agent wrote a script that moved, attacked, waited, looted an
 
 </details>
 
+## 📊 Measured effect
+
+Each task ran in DeepSeek Harness headless mode, 3 times with the skills installed and 3 times without (6 for one scenario). Every scenario hides one easy-to-miss trap:
+
+| Scenario | With skills | Without |
+| --- | :---: | :---: |
+| Copy a 400 MB file out of a VM whose built-in copy command runs at ~2 MB/s (think-about-faster-path) | 3/3 | 0/3 |
+| Internal expense-approval list page for the finance team (style-fits-the-job) | 3/3 | 0/3 |
+| README says the service starts in 10 s, it really takes 15–23 s (no-blind-wait) | 6/6 | 5/6 |
+| Find the bad frames among 8 (compare-in-one-image) | 3/3, viewed 1–3 images | 3/3, viewed 8–11 images |
+
+In the scenarios for the other 7 skills both groups passed: this model already decompiles, reads logs and checks build output on its own. One model, small samples: see [evals/results.md](evals/results.md) for the full data, method and limitations.
+
 ## 📦 Installation
 
 ### Claude Code
@@ -250,6 +263,8 @@ rules/
   core-rules.md     # one line per skill, always on in CLAUDE.md / AGENTS.md
 evals/
   scenarios.md      # reproducible test scenarios for each skill
+  results.md        # with vs without skills, measured
+  harness/          # scenario generators and scorer
 ```
 
 The `description` is the only thing the agent sees when deciding whether to load a skill, and the descriptions of all installed skills sit in its context at all times. So each one is a few English sentences: **the core rule + when to use it**.
