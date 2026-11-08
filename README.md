@@ -11,7 +11,7 @@ that correct the most common and most expensive habits of AI agents doing automa
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-the-skills)
+[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-the-skills)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-installation)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-zero-dependency-script-toolbox)
 
@@ -38,6 +38,7 @@ None of these make a task fail outright. They make it **ten times slower, reach 
 | Skill | The bad habit it fixes | When it kicks in |
 | --- | --- | --- |
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | Full-screen screenshots, stealing focus, taking over the user's mouse and keyboard without asking | Before screenshots, launching or debugging GUI apps, driving an app's UI, or using computer-use |
+| 🧩 [**compare-in-one-image**](skills/compare-in-one-image/SKILL.md) | Opening screenshots one by one and comparing them from memory: slow, misses small differences, costs N times the tokens | Before viewing two or more screenshots, renders or frames to spot a difference |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | Assuming an unseen dialog doesn't exist; dismissing it without reading it; killing processes by name | A click does nothing, an app looks frozen, a command hangs waiting for input |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | Declaring something "impossible" after a few personal attempts; retreating to a fallback (software rendering, compatibility mode, a downgrade) after one symptom that was only a transitional state | Before saying "this won't work" or "not worth it"; before switching to a fallback or downgrade |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | Waiting for results with fixed-length sleeps | When about to write a sleep to wait for something |
@@ -60,6 +61,7 @@ The **principles are platform-agnostic**. The examples lean toward Windows / Pow
 | About to… | Read first |
 | --- | --- |
 | Take a screenshot, open a GUI, click through an interface | 🫥 background-friendly |
+| Compare several screenshots, renders or frames | 🧩 compare-in-one-image |
 | Say "done / it exited / it's fixed" | 📸 screenshot-first |
 | Write a `sleep` to wait for a result | ⏱️ no-blind-wait |
 | Say "can't be done / not worth it", or switch to a fallback | 🔍 never-give-up-early |
@@ -209,14 +211,14 @@ Paste the body of `SKILL.md` (everything after the frontmatter between the two `
 
 ## 🧰 Zero-dependency script toolbox
 
-Two of the skills ship ready-to-run Windows scripts that **only need the PowerShell 5.1 and .NET Framework that come with Windows**. Nothing to install.
+Three of the skills ship ready-to-run Windows scripts that **only need the PowerShell 5.1 and .NET Framework that come with Windows**. Nothing to install.
 
 | Need | Script | Disturbs the user? |
 | --- | --- | :---: |
 | Find covered or hidden Win32 dialogs; read their controls' text and IDs | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | No |
 | Press a Win32 dialog button (WM_COMMAND, no activation needed) | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | No |
-| Capture a single window, even covered or minimized, without stealing focus | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | No |
-| Stitch several shots into one labelled grid for a single-look comparison; `-Diff` boxes what changed. `capture-window.ps1 -Burst` takes a timed series into one sheet | [`background-friendly/scripts/compose-shots.ps1`](skills/background-friendly/scripts/compose-shots.ps1) | No |
+| Capture a single window, even covered or minimized, without stealing focus; `-Burst` takes a timed series of frames | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | No |
+| Stitch several shots into one labelled grid for a single-look comparison; `-Diff` boxes what changed. | [`compare-in-one-image/scripts/compose-shots.ps1`](skills/compare-in-one-image/scripts/compose-shots.ps1) | No |
 | Launch a program minimized and not activated, logging its output | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | No |
 | Read the control tree, click buttons, set text, toggle checkboxes via UI Automation | [`background-friendly/scripts/uia.ps1`](skills/background-friendly/scripts/uia.ps1) | No |
 | Real mouse/keyboard input, then restore the foreground window and cursor | [`background-friendly/scripts/desktop-input.ps1`](skills/background-friendly/scripts/desktop-input.ps1) | ⚠️ Needs approval |
@@ -227,9 +229,9 @@ Two of the skills ship ready-to-run Windows scripts that **only need the PowerSh
 .\capture-window.ps1 -Title "My App" -Out shot.png
 .\uia.ps1 -Title "My App" -ControlType Edit -SetValue "hello"
 .\uia.ps1 -Title "My App" -Name "OK" -Invoke
-# Before/after in ONE image with changes boxed in red, and a 6-frame time series as one sheet
+# Before/after in ONE image with changes boxed in red; a 6-frame burst of a window
 .\compose-shots.ps1 -Inputs "before.png||after.png" -Diff -Out diff.png
-.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out sheet.png
+.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out burst.png
 ```
 
 > [!NOTE]

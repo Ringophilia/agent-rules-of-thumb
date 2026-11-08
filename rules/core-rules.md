@@ -4,6 +4,7 @@
      One line per rule stays in context all the time; the matching skill has the details. -->
 
 - **Background first**: the user is using this computer while you work. Capture only the target window, never the full screen; launch GUIs minimized and unfocused; drive them via UI Automation, CDP or logs; ask before taking over the user's screen, mouse or keyboard. Read the background-friendly skill before any screenshot or GUI launch.
+- **Compare in one image**: to compare two or more screenshots, renders or frames, stitch them into one labelled grid and look once; check the pixel-diff numbers first when you can. (compare-in-one-image)
 - **First-hand evidence**: before saying something started, exited or is fixed, get a screenshot, a real response or the actual artifact; otherwise say "unverified". Process names, exit codes and "build succeeded" are indirect signals. (screenshot-first)
 - **No blind waits**: never wait with a fixed sleep. Check whether the call is already synchronous; if you must poll, poll a condition with an overall timeout. (no-blind-wait)
 - **Don't give up or downgrade early**: before saying "can't be done" or switching to a fallback, confirm the state is final rather than transitional (updates, driver installs, first run), then run at least 3 independent research angles; a downgrade needs the user's OK. (never-give-up-early)

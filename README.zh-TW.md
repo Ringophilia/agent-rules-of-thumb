@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一覽)
+[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一覽)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安裝)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依賴腳本工具箱)
 
@@ -38,6 +38,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | Skill | 修正的壞習慣 | 什麼時候觸發 |
 | --- | --- | --- |
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 截全螢幕、搶焦點、動使用者的滑鼠鍵盤；不問就佔用使用者的桌面 | 截圖、啟動或除錯 GUI 程式、操作程式介面、使用 computer-use 之前 |
+| 🧩 [**compare-in-one-image**](skills/compare-in-one-image/SKILL.md) | 一張張打開截圖、靠記憶比對：慢、看不出細微差別、token 花 N 倍 | 準備看兩張以上的截圖、算繪圖或影片影格來找差異之前 |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 看不見對話框就當它不存在；沒讀內容就關掉；按程序名稱亂殺 | 點擊沒反應、程式看似當掉、指令卡住等輸入 |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己試了幾次失敗，就宣布「不可行」；主方案出現一次過渡性的異常，就退到備援方案（軟體算繪、相容模式、降級實作） | 準備說「行不通 / 不值得做」、或改用備援和降級方案之前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定時長的 sleep 等結果 | 準備寫 sleep 等某件事完成時 |
@@ -60,6 +61,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 正準備…… | 先讀 |
 | --- | --- |
 | 截圖、開 GUI、點介面 | 🫥 background-friendly |
+| 比對幾張截圖、算繪圖或影片影格 | 🧩 compare-in-one-image |
 | 說「已完成 / 已結束 / 已修好」 | 📸 screenshot-first |
 | 寫 `sleep` 等結果 | ⏱️ no-blind-wait |
 | 說「做不到 / 不值得」，或改用備援方案 | 🔍 never-give-up-early |
@@ -209,14 +211,14 @@ skill 是否被載入，取決於代理自己判斷 `description` 和目前任�
 
 ## 🧰 零依賴腳本工具箱
 
-兩條 skill 附帶可直接執行的 Windows 腳本，**只依賴系統內建的 PowerShell 5.1 和 .NET Framework**，不需要安裝任何東西。
+三條 skill 附帶可直接執行的 Windows 腳本，**只依賴系統內建的 PowerShell 5.1 和 .NET Framework**，不需要安裝任何東西。
 
 | 需求 | 腳本 | 打擾使用者？ |
 | --- | --- | :---: |
 | 找被遮住或隱藏的 Win32 對話框，讀出子控制項的文字和 ID | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | 否 |
 | 點擊 Win32 對話框按鈕（WM_COMMAND，不需要啟用視窗） | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | 否 |
-| 截單一視窗（被遮住或最小化都行，不搶焦點） | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | 否 |
-| 把多張截圖拼成一張帶標籤的網格，一眼比對；`-Diff` 用紅框標出變化。`capture-window.ps1 -Burst` 連拍並拼成一張 | [`background-friendly/scripts/compose-shots.ps1`](skills/background-friendly/scripts/compose-shots.ps1) | 否 |
+| 截單一視窗（被遮住或最小化都行，不搶焦點）；`-Burst` 按固定間隔連拍多幀 | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | 否 |
+| 把多張截圖拼成一張帶標籤的網格，一眼比對；`-Diff` 用紅框標出變化 | [`compare-in-one-image/scripts/compose-shots.ps1`](skills/compare-in-one-image/scripts/compose-shots.ps1) | 否 |
 | 以最小化、不啟用的方式啟動程式，輸出寫到日誌 | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | 否 |
 | 用 UI Automation 在背景讀控制項樹、點按鈕、填文字、勾選 | [`background-friendly/scripts/uia.ps1`](skills/background-friendly/scripts/uia.ps1) | 否 |
 | 真實滑鼠鍵盤輸入，結束後還原前景視窗和滑鼠位置 | [`background-friendly/scripts/desktop-input.ps1`](skills/background-friendly/scripts/desktop-input.ps1) | ⚠️ 需使用者同意 |
@@ -226,9 +228,9 @@ skill 是否被載入，取決於代理自己判斷 `description` 和目前任�
 .\capture-window.ps1 -Title "My App" -Out shot.png
 .\uia.ps1 -Title "My App" -ControlType Edit -SetValue "hello"
 .\uia.ps1 -Title "My App" -Name "OK" -Invoke
-# 前後比對拼成一張、變化處畫紅框；連拍 6 幀拼成一張時間序列
+# 前後比對拼成一張、變化處畫紅框；給視窗連拍 6 幀
 .\compose-shots.ps1 -Inputs "before.png||after.png" -Diff -Out diff.png
-.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out sheet.png
+.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out burst.png
 ```
 
 > [!NOTE]

@@ -8,7 +8,7 @@
   separate images, and one grid costs about as many tokens as one screenshot
   (Claude bills images by area and scales anything over ~1568 px / ~1.15 MP down).
   Trade-off: each tile gets less resolution. Use a grid to compare layout/state;
-  to READ small text use a single crop or uia.ps1 -GetText instead.
+  to READ small text use a single crop, or read the text itself (UIA, DOM, logs).
 
 .EXAMPLES
   # Grid of any shots ("||" separates items; with powershell -File arrays collapse)

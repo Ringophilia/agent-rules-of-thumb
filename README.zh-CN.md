@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一览)
+[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一览)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安装)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依赖脚本工具箱)
 
@@ -38,6 +38,7 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | Skill | 纠正的坏习惯 | 什么时候触发 |
 | --- | --- | --- |
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 截全屏、抢焦点、动用户的鼠标键盘；不问就占用用户的桌面 | 截图、启动或调试 GUI 程序、操作程序界面、使用 computer-use 之前 |
+| 🧩 [**compare-in-one-image**](skills/compare-in-one-image/SKILL.md) | 一张张打开截图、靠记忆对照：慢、看不出细微差别、token 花 N 倍 | 准备看两张以上的截图、渲染图或视频帧来找差异之前 |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 看不见弹窗就当它不存在；没读内容就点掉；按进程名乱杀 | 点击没反应、程序看似卡死、命令挂住等输入 |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己试了几次失败，就宣布"不可行"；主方案出现一次过渡性的异常，就退到兜底方案（软件渲染、兼容模式、降级实现） | 准备说"走不通 / 不值得做"、或改用兜底和降级方案之前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定时长的 sleep 等结果 | 准备写 sleep 等某件事完成时 |
@@ -57,6 +58,7 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | 正准备…… | 先读 |
 | --- | --- |
 | 截图、开 GUI、点界面 | 🫥 background-friendly |
+| 对比几张截图、渲染图或视频帧 | 🧩 compare-in-one-image |
 | 说"已完成 / 已退出 / 已修好" | 📸 screenshot-first |
 | 写 `sleep` 等结果 | ⏱️ no-blind-wait |
 | 说"做不到 / 不值得"，或改用兜底方案 | 🔍 never-give-up-early |
@@ -206,14 +208,14 @@ Skill 是否被加载，取决于智能体自己判断 `description` 和当前�
 
 ## 🧰 零依赖脚本工具箱
 
-两条 skill 附带可直接运行的 Windows 脚本，**只依赖系统自带的 PowerShell 5.1 和 .NET Framework**，不需要安装任何东西。
+三条 skill 附带可直接运行的 Windows 脚本，**只依赖系统自带的 PowerShell 5.1 和 .NET Framework**，不需要安装任何东西。
 
 | 需求 | 脚本 | 打扰用户？ |
 | --- | --- | :---: |
 | 找被遮挡或隐藏的 Win32 对话框，读出子控件的文字和 ID | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | 否 |
 | 点击 Win32 对话框按钮（WM_COMMAND，不需要激活窗口） | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | 否 |
-| 截单个窗口（被遮挡或最小化都行，不抢焦点） | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | 否 |
-| 把多张截图拼成一张带标签的网格，一眼对比；`-Diff` 用红框标出变化。`capture-window.ps1 -Burst` 连拍并拼成一张 | [`background-friendly/scripts/compose-shots.ps1`](skills/background-friendly/scripts/compose-shots.ps1) | 否 |
+| 截单个窗口（被遮挡或最小化都行，不抢焦点）；`-Burst` 按固定间隔连拍多帧 | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | 否 |
+| 把多张截图拼成一张带标签的网格，一眼对比；`-Diff` 用红框标出变化 | [`compare-in-one-image/scripts/compose-shots.ps1`](skills/compare-in-one-image/scripts/compose-shots.ps1) | 否 |
 | 以最小化、不激活的方式启动程序，输出写到日志 | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | 否 |
 | 用 UI Automation 在后台读控件树、点按钮、填文本、勾选 | [`background-friendly/scripts/uia.ps1`](skills/background-friendly/scripts/uia.ps1) | 否 |
 | 真实鼠标键盘输入，结束后还原前台窗口和鼠标位置 | [`background-friendly/scripts/desktop-input.ps1`](skills/background-friendly/scripts/desktop-input.ps1) | ⚠️ 需用户批准 |
@@ -223,9 +225,9 @@ Skill 是否被加载，取决于智能体自己判断 `description` 和当前�
 .\capture-window.ps1 -Title "My App" -Out shot.png
 .\uia.ps1 -Title "My App" -ControlType Edit -SetValue "hello"
 .\uia.ps1 -Title "My App" -Name "OK" -Invoke
-# 前后对比拼成一张、变化处画红框；连拍 6 帧拼成一张时间序列
+# 前后对比拼成一张、变化处画红框；给窗口连拍 6 帧
 .\compose-shots.ps1 -Inputs "before.png||after.png" -Diff -Out diff.png
-.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out sheet.png
+.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out burst.png
 ```
 
 > [!NOTE]

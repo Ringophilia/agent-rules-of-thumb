@@ -17,10 +17,10 @@
   # Minimized window: by default it is restored invisibly (alpha 0, no activation),
   # captured, then minimized again. Pass -NoRestoreMinimized to refuse instead.
 
-  # Burst: N frames every -IntervalMs, saved to <Out>.frames\frame_NN.png and stitched
-  # into ONE labelled contact sheet at -Out (via compose-shots.ps1). Good for loading
-  # progress, animations, flicker, or a dialog that flashes by - one image, one look.
-  ... -File capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out C:\tmp\sheet.png
+  # Burst: N frames every -IntervalMs, saved to <Out-without-ext>.frames\frame_NN.png.
+  # The JSON lists the frame paths and a "t+NNN ms" label per frame. Good for loading
+  # progress, animations, flicker, or a dialog that flashes by.
+  ... -File capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out C:\tmp\burst.png
 
 .NOTES
   Uses PrintWindow(PW_RENDERFULLCONTENT). Works for occluded windows and most
@@ -41,8 +41,7 @@ param(
   [int]$SettleMs = 400,
   [switch]$IncludeShadow,
   [int]$Burst = 1,
-  [int]$IntervalMs = 500,
-  [int]$Columns = 0
+  [int]$IntervalMs = 500
 )
 
 $ErrorActionPreference = 'Stop'
@@ -277,7 +276,7 @@ if ($Burst -le 1) {
   return
 }
 
-# ---- burst: N frames -> <Out-without-ext>.frames\frame_NN.png + one labelled contact sheet at -Out ----
+# ---- burst: N frames -> <Out-without-ext>.frames\frame_NN.png, labelled t+ms in the JSON ----
 $framesDir = [IO.Path]::Combine($dir, [IO.Path]::GetFileNameWithoutExtension($outFull) + '.frames')
 if (-not (Test-Path $framesDir)) { New-Item -ItemType Directory -Force $framesDir | Out-Null }
 $frames = @(1..$Burst | ForEach-Object { [IO.Path]::Combine($framesDir, ('frame_{0:D2}.png' -f $_)) })
@@ -285,20 +284,13 @@ $elapsed = New-Object 'long[]' $Burst
 $status = [BgCap]::Capture($target, [string[]]$frames, $IntervalMs, -not $NoRestoreMinimized, $SettleMs, [bool]$IncludeShadow, $elapsed)
 $labels = @(0..($Burst - 1) | ForEach-Object { 't+{0} ms' -f $elapsed[$_] })
 $winTitle = [BgCap]::Title($target)
-$sheetArgs = @{
-  Inputs = ($frames -join '||'); Labels = ($labels -join '||'); Out = $outFull
-  Title = ('{0}  -  {1} frames, every {2} ms' -f $winTitle, $Burst, $IntervalMs)
-}
-if ($Columns -gt 0) { $sheetArgs.Columns = $Columns }
-$sheet = & (Join-Path $PSScriptRoot 'compose-shots.ps1') @sheetArgs | ConvertFrom-Json
 [pscustomobject]@{
-  hwnd   = ('0x{0:X}' -f $target.ToInt64())
-  pid    = [BgCap]::Pid($target)
-  title  = $winTitle
-  status = $status
-  path   = $outFull
-  layout = $sheet.layout
-  approxTokens = $sheet.approxTokens
-  frames = $frames
+  hwnd      = ('0x{0:X}' -f $target.ToInt64())
+  pid       = [BgCap]::Pid($target)
+  title     = $winTitle
+  status    = $status
+  framesDir = $framesDir
+  frames    = $frames
+  labels    = $labels
   elapsedMs = @($elapsed | ForEach-Object { [long]$_ })
 } | ConvertTo-Json -Compress

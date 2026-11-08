@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一覧)
+[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一覧)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-インストール)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-依存ゼロのスクリプト集)
 
@@ -38,6 +38,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | Skill | 正す癖 | いつ発動するか |
 | --- | --- | --- |
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 全画面スクショ、フォーカスを奪う、許可なくユーザーのマウスとキーボードを使う | スクリーンショット、GUI アプリの起動・デバッグ、UI 操作、computer-use を使う前 |
+| 🧩 [**compare-in-one-image**](skills/compare-in-one-image/SKILL.md) | スクショを 1 枚ずつ開き、記憶を頼りに見比べる。遅く、細かな違いを見落とし、トークンも N 倍かかる | 2 枚以上のスクショ・レンダリング・動画フレームを見比べて違いを探す前 |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 見えないダイアログは存在しないとみなす。内容を読まずに閉じる。プロセス名でまとめて kill する | クリックが効かない、アプリが固まったように見える、コマンドが入力待ちで止まった |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自分で数回試して失敗しただけで「不可能」と宣言する。一時的な状態にすぎない異常を一度見ただけで、フォールバック（ソフトウェアレンダリング、互換モード、機能縮小）に退く | 「うまくいかない / やる価値がない」と言う前、フォールバックや機能縮小に切り替える前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 固定時間の sleep で結果を待つ | 何かの完了を sleep で待とうとしたとき |
@@ -60,6 +61,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | しようとしていること | 先に読む |
 | --- | --- |
 | スクショを撮る、GUI を開く、画面を操作する | 🫥 background-friendly |
+| 複数のスクショ・レンダリング・フレームを見比べる | 🧩 compare-in-one-image |
 | 「完了 / 終了した / 直った」と言う | 📸 screenshot-first |
 | 結果待ちに `sleep` を書く | ⏱️ no-blind-wait |
 | 「できない / やる価値がない」と言う、フォールバックに切り替える | 🔍 never-give-up-early |
@@ -209,14 +211,14 @@ skill が読み込まれるかどうかは、エージェントが `description`
 
 ## 🧰 依存ゼロのスクリプト集
 
-2 つの skill には、そのまま実行できる Windows スクリプトが付属しています。**Windows に標準で入っている PowerShell 5.1 と .NET Framework だけ**で動き、追加のインストールは不要です。
+3 つの skill には、そのまま実行できる Windows スクリプトが付属しています。**Windows に標準で入っている PowerShell 5.1 と .NET Framework だけ**で動き、追加のインストールは不要です。
 
 | 用途 | スクリプト | ユーザーの邪魔をするか |
 | --- | --- | :---: |
 | 隠れている／非表示の Win32 ダイアログを探し、子コントロールのテキストと ID を読む | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | しない |
 | Win32 ダイアログのボタンを押す（WM_COMMAND、アクティブ化不要） | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | しない |
-| 単一ウィンドウを撮る（隠れていても最小化されていても可、フォーカスを奪わない） | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | しない |
-| 複数のスクショをラベル付きの 1 枚のグリッドにまとめ、一目で比較する。`-Diff` で変化箇所を赤枠表示。`capture-window.ps1 -Burst` は連写して 1 枚にまとめる | [`background-friendly/scripts/compose-shots.ps1`](skills/background-friendly/scripts/compose-shots.ps1) | しない |
+| 単一ウィンドウを撮る（隠れていても最小化されていても可、フォーカスを奪わない）。`-Burst` で一定間隔の連写 | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | しない |
+| 複数のスクショをラベル付きの 1 枚のグリッドにまとめ、一目で比較する。`-Diff` で変化箇所を赤枠表示 | [`compare-in-one-image/scripts/compose-shots.ps1`](skills/compare-in-one-image/scripts/compose-shots.ps1) | しない |
 | プログラムを最小化・非アクティブで起動し、出力をログに書く | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | しない |
 | UI Automation でコントロールツリーを読み、ボタンを押し、テキストを入力し、チェックを切り替える | [`background-friendly/scripts/uia.ps1`](skills/background-friendly/scripts/uia.ps1) | しない |
 | 実際のマウス・キーボード入力。終了後に前面ウィンドウとカーソル位置を元に戻す | [`background-friendly/scripts/desktop-input.ps1`](skills/background-friendly/scripts/desktop-input.ps1) | ⚠️ 要許可 |
@@ -227,9 +229,9 @@ skill が読み込まれるかどうかは、エージェントが `description`
 .\capture-window.ps1 -Title "My App" -Out shot.png
 .\uia.ps1 -Title "My App" -ControlType Edit -SetValue "hello"
 .\uia.ps1 -Title "My App" -Name "OK" -Invoke
-# 前後比較を 1 枚に（変化は赤枠）、6 フレームの連写を 1 枚の時系列に
+# 前後比較を 1 枚に（変化は赤枠）、ウィンドウを 6 フレーム連写
 .\compose-shots.ps1 -Inputs "before.png||after.png" -Diff -Out diff.png
-.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out sheet.png
+.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out burst.png
 ```
 
 > [!NOTE]
