@@ -1,6 +1,6 @@
 ---
 name: background-friendly
-description: 不打扰用户的后台工作方式（Windows）。在要截图、看某个程序/窗口长什么样、启动或调试 GUI 程序/游戏/Electron/浏览器页面、点击或输入到某个程序、运行会弹窗口的命令、或准备使用 computer-use 之前使用。规则：只截目标窗口不截全屏（被遮挡或最小化也能截），程序 headless/最小化不激活地启动，用 UI Automation/CDP/日志/测试在后台操作；必须占用用户屏幕、鼠标、键盘时先请求批准，未批准就暂停；批准后优先用 computer-use，没有就用自带的键鼠脚本。Use before any screenshot, GUI launch, app debugging, UI interaction or computer-use action.
+description: 不打扰用户的后台工作方式（Windows）。在要截图、看某个程序/窗口长什么样、启动或调试 GUI 程序/游戏/Electron/浏览器页面、点击或输入到某个程序、运行会弹窗口的命令、或准备使用 computer-use 之前使用。规则：只截目标窗口不截全屏（被遮挡或最小化也能截），多张图要对比时拼成一张带标签的网格（前后差异、连拍时间序列），程序 headless/最小化不激活地启动，用 UI Automation/CDP/日志/测试在后台操作；必须占用用户屏幕、鼠标、键盘时先请求批准，未批准就暂停；批准后优先用 computer-use，没有就用自带的键鼠脚本。Use before any screenshot, GUI launch, app debugging, UI interaction or computer-use action.
 compatibility: 原则通用；scripts/ 需要 Windows + PowerShell 5.1 或更高版本（uia.ps1 首次运行时用 Windows 自带的 .NET Framework csc 编译 uia.cs）
 ---
 
@@ -18,7 +18,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "<scripts>\<脚本>.ps1" ...
 
 | 脚本 | 作用 | 打扰用户？ |
 |---|---|---|
-| `capture-window.ps1` | 截单个窗口（被遮挡/最小化也行） | 否 |
+| `capture-window.ps1` | 截单个窗口（被遮挡/最小化也行）；`-Burst` 连拍并拼成一张 | 否 |
+| `compose-shots.ps1` | 把多张截图拼成一张带标签的网格；`-Diff` 用红框标出前后变化 | 否 |
 | `start-quiet.ps1` | 最小化+不激活地启动程序，输出写日志 | 否 |
 | `uia.ps1` | UI Automation：读控件树、点按钮、填文本、勾选、选择、读文字 | 否 |
 | `desktop-input.ps1` | 真实鼠标键盘输入（点击/拖动/滚轮/打字/快捷键），完成后还原 | **是，需先批准** |
@@ -59,6 +60,36 @@ capture-window.ps1 -Hwnd 0x30C9E -Out "<scratchpad>\shot.png"
 - `status` 的取值有 `ok`、`restored-invisibly`、`legacy-printwindow`、`black`。`black` 说明 DirectX/OpenGL/Vulkan 游戏或独占全屏的画面拿不到，这时改用程序内置截图，或改成窗口化模式再试，**不要**退回全屏截图。
 - `cloaked` 表示窗口在别的虚拟桌面上或者是隐藏的 UWP 框架，可能截不到。
 - 截图放 scratchpad，不要放进用户的项目目录。
+
+### 1.1 多张图要对比时：拼成一张再看
+
+模型在**同一张图里**对比几个区域，比在几张图之间来回对照要准得多。而且图片按面积计费，超过约 1568px 或约 1.15MP 的图会被缩小，所以拼好的一张图只花大约一张截图的 token（默认上限约 1.5k）。下面这些情况，拼成一张再用 Read 看：
+
+| 场景 | 做法 |
+|---|---|
+| 操作前后对比：点了按钮后变了什么 | `compose-shots.ps1 -Inputs "before.png\|\|after.png" -Diff -Out diff.png` |
+| 过程变化：加载进度、动画、闪烁、一闪而过的弹窗 | `capture-window.ps1 -Title X -Burst 6 -IntervalMs 300 -Out sheet.png` |
+| 多个窗口或多个步骤的总览 | `compose-shots.ps1 -Inputs "a.png\|\|b.png\|\|c.png" -Labels "登录\|\|加载\|\|主界面" -Out grid.png` |
+
+```powershell
+# 前后对比：输出 3 格（before / after / 只亮出变化区域），红框标出变化
+compose-shots.ps1 -Inputs "<s>\before.png||<s>\after.png" -Diff -Out "<s>\diff.png" -Title "点击保存之后"
+# JSON 里的 changedBoxes 是 after 图的原始像素坐标，changedPercent 是变化像素占比；
+# 先看数字（0 个区域说明界面根本没变），再决定要不要 Read 这张图
+
+# 连拍：帧存在 <Out>.frames\frame_NN.png，拼好的图在 -Out，每格标注 t+毫秒
+capture-window.ps1 -ProcessName MyApp -Burst 6 -IntervalMs 300 -Out "<s>\sheet.png"
+
+# 任意拼图：通配符按文件名排序；-Columns 固定列数；-MaxEdge / -MaxPixels 调整大小
+compose-shots.ps1 -Inputs "<s>\frames\*.png" -Out "<s>\grid.png"
+```
+
+使用要点：
+- **先想清楚要回答什么问题，再拼**，比如"这 6 帧里，弹窗在哪一帧出现"。每格都要有含义明确的标签（步骤名或时间），否则模型分不清哪格是哪格。
+- **一张图最好不超过 6 格**，9 格是上限。格子越多，每格分辨率越低。
+- **拼图会降低每格的分辨率**，适合看布局、状态、颜色、有无变化。要**读小字**，用单张截图或局部裁剪，或者直接用 `uia.ps1 -GetText` 读文字。要给 `desktop-input.ps1` **量坐标**，也必须在单张原图上量，不要在拼图上量。
+- `-Diff` 对比的是像素：光标闪烁、时钟、动画都会被算成变化。看红框的位置和大小来判断，不要只看数量。
+- 连拍是为了**观察过程**，不是为了等待完成。等某件事完成，用条件判断（见 no-blind-wait），完成后再截一张。
 
 ---
 

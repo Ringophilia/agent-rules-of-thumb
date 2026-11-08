@@ -17,6 +17,11 @@
   # Minimized window: by default it is restored invisibly (alpha 0, no activation),
   # captured, then minimized again. Pass -NoRestoreMinimized to refuse instead.
 
+  # Burst: N frames every -IntervalMs, saved to <Out>.frames\frame_NN.png and stitched
+  # into ONE labelled contact sheet at -Out (via compose-shots.ps1). Good for loading
+  # progress, animations, flicker, or a dialog that flashes by - one image, one look.
+  ... -File capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out C:\tmp\sheet.png
+
 .NOTES
   Uses PrintWindow(PW_RENDERFULLCONTENT). Works for occluded windows and most
   Win32 / WPF / WinForms / Qt / Electron / browser windows. Some DirectX/OpenGL/
@@ -34,7 +39,10 @@ param(
   [string]$Out,
   [switch]$NoRestoreMinimized,
   [int]$SettleMs = 400,
-  [switch]$IncludeShadow
+  [switch]$IncludeShadow,
+  [int]$Burst = 1,
+  [int]$IntervalMs = 500,
+  [int]$Columns = 0
 )
 
 $ErrorActionPreference = 'Stop'
@@ -148,6 +156,13 @@ public static class BgCap {
 
   // Returns a status string; writes PNG to outPath.
   public static string Capture(IntPtr h, string outPath, bool restoreMin, int settleMs, bool shadow) {
+    return Capture(h, new string[] { outPath }, 0, restoreMin, settleMs, shadow, new long[1]);
+  }
+
+  // Burst: one frame per outPaths entry, every intervalMs (scheduled from the first frame).
+  // A minimized window is restored invisibly ONCE for the whole burst.
+  // elapsed[i] receives the capture time of frame i in ms since the first frame.
+  public static string Capture(IntPtr h, string[] outPaths, int intervalMs, bool restoreMin, int settleMs, bool shadow, long[] elapsed) {
     if (!IsWindow(h)) throw new Exception("not a window");
     bool wasMin = IsIconic(h);
     IntPtr fg = GetForegroundWindow();
@@ -169,16 +184,27 @@ public static class BgCap {
       note = "restored-invisibly";
     }
 
-    Bitmap bmp = null; bool black;
+    Bitmap bmp = null; bool black, anyBlack = false, legacy = false;
+    var sw = Stopwatch.StartNew();
     try {
-      bmp = Grab(h, 2 /*PW_RENDERFULLCONTENT*/, shadow, out black);
-      if (black) {
-        bmp.Dispose();
-        bmp = Grab(h, 0, shadow, out black);
-        if (!black) note = (note + " legacy-printwindow").Trim();
+      for (int i = 0; i < outPaths.Length; i++) {
+        if (i > 0 && intervalMs > 0) {
+          long wait = (long)i * intervalMs - sw.ElapsedMilliseconds;
+          if (wait > 0) Thread.Sleep((int)wait);
+        }
+        elapsed[i] = sw.ElapsedMilliseconds;
+        bmp = Grab(h, legacy ? 0u : 2u /*PW_RENDERFULLCONTENT*/, shadow, out black);
+        if (black && !legacy) {
+          bmp.Dispose();
+          bmp = Grab(h, 0, shadow, out black);
+          if (!black) legacy = true;
+        }
+        bmp.Save(outPaths[i], ImageFormat.Png);
+        bmp.Dispose(); bmp = null;
+        if (black) anyBlack = true;
       }
-      bmp.Save(outPath, ImageFormat.Png);
-      if (black) note = (note + " black").Trim();
+      if (legacy) note = (note + " legacy-printwindow").Trim();
+      if (anyBlack) note = (note + " black").Trim();
       return note == "" ? "ok" : note;
     } finally {
       if (bmp != null) bmp.Dispose();
@@ -239,11 +265,40 @@ $outFull = [IO.Path]::GetFullPath($Out)
 $dir = [IO.Path]::GetDirectoryName($outFull)
 if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Force $dir | Out-Null }
 
-$status = [BgCap]::Capture($target, $outFull, -not $NoRestoreMinimized, $SettleMs, [bool]$IncludeShadow)
+if ($Burst -le 1) {
+  $status = [BgCap]::Capture($target, $outFull, -not $NoRestoreMinimized, $SettleMs, [bool]$IncludeShadow)
+  [pscustomobject]@{
+    hwnd   = ('0x{0:X}' -f $target.ToInt64())
+    pid    = [BgCap]::Pid($target)
+    title  = [BgCap]::Title($target)
+    status = $status
+    path   = $outFull
+  } | ConvertTo-Json -Compress
+  return
+}
+
+# ---- burst: N frames -> <Out-without-ext>.frames\frame_NN.png + one labelled contact sheet at -Out ----
+$framesDir = [IO.Path]::Combine($dir, [IO.Path]::GetFileNameWithoutExtension($outFull) + '.frames')
+if (-not (Test-Path $framesDir)) { New-Item -ItemType Directory -Force $framesDir | Out-Null }
+$frames = @(1..$Burst | ForEach-Object { [IO.Path]::Combine($framesDir, ('frame_{0:D2}.png' -f $_)) })
+$elapsed = New-Object 'long[]' $Burst
+$status = [BgCap]::Capture($target, [string[]]$frames, $IntervalMs, -not $NoRestoreMinimized, $SettleMs, [bool]$IncludeShadow, $elapsed)
+$labels = @(0..($Burst - 1) | ForEach-Object { 't+{0} ms' -f $elapsed[$_] })
+$winTitle = [BgCap]::Title($target)
+$sheetArgs = @{
+  Inputs = ($frames -join '||'); Labels = ($labels -join '||'); Out = $outFull
+  Title = ('{0}  -  {1} frames, every {2} ms' -f $winTitle, $Burst, $IntervalMs)
+}
+if ($Columns -gt 0) { $sheetArgs.Columns = $Columns }
+$sheet = & (Join-Path $PSScriptRoot 'compose-shots.ps1') @sheetArgs | ConvertFrom-Json
 [pscustomobject]@{
   hwnd   = ('0x{0:X}' -f $target.ToInt64())
   pid    = [BgCap]::Pid($target)
-  title  = [BgCap]::Title($target)
+  title  = $winTitle
   status = $status
   path   = $outFull
+  layout = $sheet.layout
+  approxTokens = $sheet.approxTokens
+  frames = $frames
+  elapsedMs = @($elapsed | ForEach-Object { [long]$_ })
 } | ConvertTo-Json -Compress

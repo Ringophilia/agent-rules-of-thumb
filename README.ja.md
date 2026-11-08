@@ -183,6 +183,7 @@ Copy-Item -Recurse -Force agent-rules-of-thumb\skills\* "$HOME\.claude\skills\"
 | 隠れている／非表示の Win32 ダイアログを探し、子コントロールのテキストと ID を読む | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | しない |
 | Win32 ダイアログのボタンを押す（WM_COMMAND、アクティブ化不要） | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | しない |
 | 単一ウィンドウを撮る（隠れていても最小化されていても可、フォーカスを奪わない） | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | しない |
+| 複数のスクショをラベル付きの 1 枚のグリッドにまとめ、一目で比較する。`-Diff` で変化箇所を赤枠表示。`capture-window.ps1 -Burst` は連写して 1 枚にまとめる | [`background-friendly/scripts/compose-shots.ps1`](skills/background-friendly/scripts/compose-shots.ps1) | しない |
 | プログラムを最小化・非アクティブで起動し、出力をログに書く | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | しない |
 | UI Automation でコントロールツリーを読み、ボタンを押し、テキストを入力し、チェックを切り替える | [`background-friendly/scripts/uia.ps1`](skills/background-friendly/scripts/uia.ps1) | しない |
 | 実際のマウス・キーボード入力。終了後に前面ウィンドウとカーソル位置を元に戻す | [`background-friendly/scripts/desktop-input.ps1`](skills/background-friendly/scripts/desktop-input.ps1) | ⚠️ 要許可 |
@@ -193,6 +194,9 @@ Copy-Item -Recurse -Force agent-rules-of-thumb\skills\* "$HOME\.claude\skills\"
 .\capture-window.ps1 -Title "My App" -Out shot.png
 .\uia.ps1 -Title "My App" -ControlType Edit -SetValue "hello"
 .\uia.ps1 -Title "My App" -Name "OK" -Invoke
+# 前後比較を 1 枚に（変化は赤枠）、6 フレームの連写を 1 枚の時系列に
+.\compose-shots.ps1 -Inputs "before.png||after.png" -Diff -Out diff.png
+.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out sheet.png
 ```
 
 > [!NOTE]

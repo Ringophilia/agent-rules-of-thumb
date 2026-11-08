@@ -183,6 +183,7 @@ Two of the skills ship ready-to-run Windows scripts that **only need the PowerSh
 | Find covered or hidden Win32 dialogs; read their controls' text and IDs | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | No |
 | Press a Win32 dialog button (WM_COMMAND, no activation needed) | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | No |
 | Capture a single window, even covered or minimized, without stealing focus | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | No |
+| Stitch several shots into one labelled grid for a single-look comparison; `-Diff` boxes what changed. `capture-window.ps1 -Burst` takes a timed series into one sheet | [`background-friendly/scripts/compose-shots.ps1`](skills/background-friendly/scripts/compose-shots.ps1) | No |
 | Launch a program minimized and not activated, logging its output | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | No |
 | Read the control tree, click buttons, set text, toggle checkboxes via UI Automation | [`background-friendly/scripts/uia.ps1`](skills/background-friendly/scripts/uia.ps1) | No |
 | Real mouse/keyboard input, then restore the foreground window and cursor | [`background-friendly/scripts/desktop-input.ps1`](skills/background-friendly/scripts/desktop-input.ps1) | ⚠️ Needs approval |
@@ -193,6 +194,9 @@ Two of the skills ship ready-to-run Windows scripts that **only need the PowerSh
 .\capture-window.ps1 -Title "My App" -Out shot.png
 .\uia.ps1 -Title "My App" -ControlType Edit -SetValue "hello"
 .\uia.ps1 -Title "My App" -Name "OK" -Invoke
+# Before/after in ONE image with changes boxed in red, and a 6-frame time series as one sheet
+.\compose-shots.ps1 -Inputs "before.png||after.png" -Diff -Out diff.png
+.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out sheet.png
 ```
 
 > [!NOTE]

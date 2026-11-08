@@ -183,6 +183,7 @@ Copy-Item -Recurse -Force agent-rules-of-thumb\skills\* "$HOME\.claude\skills\"
 | 找被遮住或隱藏的 Win32 對話框，讀出子控制項的文字和 ID | [`dialog-handling/scripts/list-windows.ps1`](skills/dialog-handling/scripts/list-windows.ps1) | 否 |
 | 點擊 Win32 對話框按鈕（WM_COMMAND，不需要啟用視窗） | [`dialog-handling/scripts/press-button.ps1`](skills/dialog-handling/scripts/press-button.ps1) | 否 |
 | 截單一視窗（被遮住或最小化都行，不搶焦點） | [`background-friendly/scripts/capture-window.ps1`](skills/background-friendly/scripts/capture-window.ps1) | 否 |
+| 把多張截圖拼成一張帶標籤的網格，一眼比對；`-Diff` 用紅框標出變化。`capture-window.ps1 -Burst` 連拍並拼成一張 | [`background-friendly/scripts/compose-shots.ps1`](skills/background-friendly/scripts/compose-shots.ps1) | 否 |
 | 以最小化、不啟用的方式啟動程式，輸出寫到日誌 | [`background-friendly/scripts/start-quiet.ps1`](skills/background-friendly/scripts/start-quiet.ps1) | 否 |
 | 用 UI Automation 在背景讀控制項樹、點按鈕、填文字、勾選 | [`background-friendly/scripts/uia.ps1`](skills/background-friendly/scripts/uia.ps1) | 否 |
 | 真實滑鼠鍵盤輸入，結束後還原前景視窗和滑鼠位置 | [`background-friendly/scripts/desktop-input.ps1`](skills/background-friendly/scripts/desktop-input.ps1) | ⚠️ 需使用者同意 |
@@ -192,6 +193,9 @@ Copy-Item -Recurse -Force agent-rules-of-thumb\skills\* "$HOME\.claude\skills\"
 .\capture-window.ps1 -Title "My App" -Out shot.png
 .\uia.ps1 -Title "My App" -ControlType Edit -SetValue "hello"
 .\uia.ps1 -Title "My App" -Name "OK" -Invoke
+# 前後比對拼成一張、變化處畫紅框；連拍 6 幀拼成一張時間序列
+.\compose-shots.ps1 -Inputs "before.png||after.png" -Diff -Out diff.png
+.\capture-window.ps1 -Title "My App" -Burst 6 -IntervalMs 300 -Out sheet.png
 ```
 
 > [!NOTE]
