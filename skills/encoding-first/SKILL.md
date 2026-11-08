@@ -1,6 +1,6 @@
 ---
 name: encoding-first
-description: 写入含中文或其他非 ASCII 字符的文件（脚本、配置、数据、源码）之前，先按"谁来读它"选对编码和 BOM，而不是先随手保存、出错了再改。Windows PowerShell 5.1 读无 BOM 的 .ps1 会按 ANSI 码页（如 GBK）解析而乱码报错；.bat/.cmd 遇到 BOM 第一行就坏；bash/sh 的 shebang、JSON、大多数 Unix 工具不能有 BOM；Excel 打开 CSV 要 BOM；Python 在中文 Windows 上 open() 默认按 GBK 读。在要写或改 .ps1 .bat .cmd .sh .py .json .csv .reg .cs 等文件且内容含非 ASCII 字符、用 PowerShell 的 Set-Content/Out-File/> 写文件、或看到乱码（锟斤拷、鍙傛暟、�、ï»¿）和"缺少终止符"、UnicodeDecodeError 'gbk'、"Unexpected token in JSON at position 0" 之类的错误时使用。写完用字节检查确认，项目已有约定就照着做，同类错误一次修完。Use before writing any file containing non-ASCII text, and at the first sign of mojibake or encoding errors.
+description: "Pick the encoding by who reads the file before writing non-ASCII text: .ps1 for PowerShell 5.1 needs pure ASCII or UTF-8 with BOM; .bat/.cmd, shebang scripts and JSON must have no BOM; CSV for Excel needs one; Python on Chinese Windows opens files as GBK by default. Use before writing .ps1 .bat .cmd .sh .py .json .csv .reg files containing non-ASCII text, and at the first mojibake (锟斤拷, 鍙傛暟, ï»¿) or 'missing terminator' / 'gbk' decode error; check the bytes after writing."
 ---
 
 # 先定编码，再写文件

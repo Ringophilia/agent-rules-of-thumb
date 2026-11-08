@@ -1,6 +1,6 @@
 ---
 name: no-blind-wait
-description: 编排"发起 → 等待 → 取结果"时，用同步返回、完成事件或带总超时的条件轮询代替固定时长的 sleep，并给长流程打阶段标记，超时时能定位卡在哪一步。当准备写 sleep / Start-Sleep / time.sleep / setTimeout 来"等它好"，等待服务就绪、端口、文件、页面、窗口出现，远程或后台执行任务，或某一步耗时远超预期、分不清是卡住还是在正常运行时使用。Use whenever you are about to sleep a fixed time to wait for something.
+description: "Never wait with a fixed sleep. Rely on the synchronous return, a completion event, or condition polling with an overall timeout, and mark phases so a timeout shows where it got stuck. Use whenever you are about to write sleep / Start-Sleep / time.sleep / setTimeout to wait for a service, port, file, window or remote task, or when a step takes far longer than expected."
 ---
 
 # 拒绝盲等

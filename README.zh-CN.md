@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一览)
+[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一览)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安装)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依赖脚本工具箱)
 
@@ -39,15 +39,14 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | --- | --- | --- |
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 截全屏、抢焦点、动用户的鼠标键盘；不问就占用用户的桌面 | 截图、启动或调试 GUI 程序、操作程序界面、使用 computer-use 之前 |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 看不见弹窗就当它不存在；没读内容就点掉；按进程名乱杀 | 点击没反应、程序看似卡死、命令挂住等输入 |
-| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己试了几次失败，就宣布"不可行" | 准备说"走不通 / 不值得做"之前 |
+| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己试了几次失败，就宣布"不可行"；主方案出现一次过渡性的异常，就退到兜底方案（软件渲染、兼容模式、降级实现） | 准备说"走不通 / 不值得做"、或改用兜底和降级方案之前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定时长的 sleep 等结果 | 准备写 sleep 等某件事完成时 |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | 根据进程名、退出码等间接指标断言状态 | 准备说"已启动 / 已退出 / 已修好"之前 |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 习惯性地用最熟悉、而不是最合适的工具 | 慢操作、批量操作、跨机操作之前 |
 | 🙋 [**maybe-it-was-the-user**](skills/maybe-it-was-the-user/SKILL.md) | 用户关掉了窗口、改了文件，却被当成程序出错，开始排错或反复重启 | 程序、窗口、文件意外变化，准备排错之前 |
-| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 不分场景套用"AI 风"：商务工具满是毛玻璃、紫蓝渐变、霓虹；娱乐应用却做得死板 | 设计或编写任何 UI 样式之前 |
+| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 不分场景套用"AI 风"：商务工具满是毛玻璃、紫蓝渐变、霓虹；娱乐应用却做得死板。和一律鼓励"大胆"的设计 skill 不同，这里先看用途再定风格 | 设计或编写任何 UI 样式之前 |
 | 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | 按钮放错地方、入口藏得深、多余的确认和步骤；加用户没要的功能、菜单和入口 | 设计或修改交互、流程、表单、弹窗时；宣布 UI 完成之前 |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自己能跑的命令、能读的文件、能查的报错，却停下来让用户去做 | 准备让用户运行、检查、复制、确认任何东西之前 |
-| ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | 主方案出现一次过渡性的异常，就退到兜底方案（软件渲染、兼容模式、降级实现） | 准备放弃主方案、改用兜底或降级方案之前 |
 | 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 有变数的流程也用一个固定脚本跑到底，默认每一步都按预期发生 | 准备写脚本对会变化的系统执行一长串操作之前；一次性脚本失败两次以上时 |
 | 🔤 [**encoding-first**](skills/encoding-first/SKILL.md) | 含中文的文件随工具默认编码保存，乱码或报错后才改，下次再犯 | 写任何含中文或其他非 ASCII 字符的文件之前；一看到乱码时 |
 
@@ -60,14 +59,13 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | 截图、开 GUI、点界面 | 🫥 background-friendly |
 | 说"已完成 / 已退出 / 已修好" | 📸 screenshot-first |
 | 写 `sleep` 等结果 | ⏱️ no-blind-wait |
-| 说"做不到 / 不值得" | 🔍 never-give-up-early |
+| 说"做不到 / 不值得"，或改用兜底方案 | 🔍 never-give-up-early |
 | 跑一个慢的、批量的、跨机的操作 | 🚀 think-about-faster-path |
 | 面对"点了没反应 / 卡住了" | 🪟 dialog-handling |
 | 排查"突然"关闭或变化的东西 | 🙋 maybe-it-was-the-user |
 | 给 UI 选配色、字体、效果 | 🎨 style-fits-the-job |
 | 摆按钮、设计流程、宣布界面做完了 | 🧭 think-like-the-user |
 | 让用户去运行命令或检查什么 | 🛠️ just-do-it-yourself |
-| 改用兜底或降级方案 | ↩️ dont-fall-back-too-soon |
 | 写脚本从头到尾执行一长串操作 | 📜 no-blind-script |
 | 写含中文等非 ASCII 字符的脚本或文件 | 🔤 encoding-first |
 
@@ -144,7 +142,7 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 </details>
 
 <details>
-<summary><b>↩️ dont-fall-back-too-soon</b>：把更新时的重启当成"3D 加速不可行"的证据</summary>
+<summary><b>🔍 never-give-up-early</b>：把更新时的重启当成"3D 加速不可行"的证据</summary>
 
 <br>
 
@@ -192,12 +190,11 @@ Copy-Item -Recurse -Force agent-rules-of-thumb\skills\* "$HOME\.claude\skills\"
 
 可以只挑需要的 skill 复制。装好后开一个新会话即可生效。
 
-> [!TIP]
-> Skill 是否被加载，取决于智能体自己判断 `description` 和当前任务是否匹配。如果希望某条规则**始终生效**，可以在全局 `~/.claude/CLAUDE.md` 里加一行，例如：
->
-> ```markdown
-> - 截图、启动或调试 GUI 程序、使用 computer-use 之前，先读 background-friendly skill 并照做。
-> ```
+### 常驻规则（推荐）
+
+Skill 是否被加载，取决于智能体自己判断 `description` 和当前任务是否匹配。"准备说做不到之前"这类习惯型规则，触发的时机智能体自己很难察觉，所以最可靠的用法是：**skill 放细节，再把每条规则的一句话常驻在上下文里**。
+
+[`rules/core-rules.zh-CN.md`](rules/core-rules.zh-CN.md) 就是这些句子（英文版：[`rules/core-rules.md`](rules/core-rules.md)），整段粘贴进 `~/.claude/CLAUDE.md`、`AGENTS.md` 或智能体的系统提示词即可。
 
 ### 其他支持 Agent Skills 标准的智能体
 
@@ -243,9 +240,13 @@ skills/
   <skill-name>/
     SKILL.md        # YAML frontmatter（name + description）+ Markdown 正文
     scripts/        # 可选：skill 里引用的可执行脚本
+rules/
+  core-rules.md     # 每条 skill 一句话，放进 CLAUDE.md / AGENTS.md 常驻
+evals/
+  scenarios.md      # 每条 skill 的可复现测试场景
 ```
 
-`description` 是智能体决定"要不要加载这个 skill"的唯一依据，所以里面同时写了**做什么**和**什么时候用**。
+`description` 是智能体决定"要不要加载这个 skill"的唯一依据，而且所有已安装 skill 的 description 会一直占着上下文，所以统一用几句英文写成：**核心规则 + 什么时候用**。正文用中文。
 
 每条 skill 的正文大致按同一个结构组织：
 
@@ -262,9 +263,10 @@ skills/
 - **新的翻车案例**：你的智能体反复犯的某个错，附上当时的现场（命令、输出、截图）
 - **其他平台的示例**：macOS / Linux 下的等价做法和脚本
 - **反例**：某条规则在你的场景里给出了错误的指导
+- **测试结果**：用[测试场景](evals/scenarios.md)对比装与不装 skill 的表现（注明智能体和模型版本）
 - **翻译**：skill 本身或本 README 的其他语言版本
 
-新增 skill 时请保持这几个约定：从真实案例出发；`description` 写清"做什么 + 什么时候用"；正文给出可执行的步骤而不是口号；脚本零依赖、纯 ASCII。
+新增 skill 时请保持这几个约定：从真实案例出发；`description` 用几句英文写清"核心规则 + 什么时候用"；正文给出可执行的步骤而不是口号；脚本零依赖、纯 ASCII；同时在 `rules/core-rules*.md` 里加一句常驻规则，在 `evals/scenarios.md` 里加一个测试场景。
 
 ## 📄 许可
 

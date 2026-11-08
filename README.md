@@ -11,7 +11,7 @@ that correct the most common and most expensive habits of AI agents doing automa
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-the-skills)
+[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-the-skills)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-installation)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-zero-dependency-script-toolbox)
 
@@ -39,22 +39,21 @@ None of these make a task fail outright. They make it **ten times slower, reach 
 | --- | --- | --- |
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | Full-screen screenshots, stealing focus, taking over the user's mouse and keyboard without asking | Before screenshots, launching or debugging GUI apps, driving an app's UI, or using computer-use |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | Assuming an unseen dialog doesn't exist; dismissing it without reading it; killing processes by name | A click does nothing, an app looks frozen, a command hangs waiting for input |
-| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | Declaring something "impossible" after a few personal attempts | Before saying "this won't work" or "not worth it" |
+| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | Declaring something "impossible" after a few personal attempts; retreating to a fallback (software rendering, compatibility mode, a downgrade) after one symptom that was only a transitional state | Before saying "this won't work" or "not worth it"; before switching to a fallback or downgrade |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | Waiting for results with fixed-length sleeps | When about to write a sleep to wait for something |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | Asserting state from indirect signals like process names and exit codes | Before saying "it started / it exited / it's fixed" |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | Using the most familiar tool instead of the most suitable one | Before slow, bulk, repetitive, or cross-machine operations |
 | 🙋 [**maybe-it-was-the-user**](skills/maybe-it-was-the-user/SKILL.md) | Treating a window the user closed, or a file the user edited, as a bug, then debugging it or restarting it over and over | A program, window, or file changes unexpectedly, before you start debugging it |
-| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | The same "AI look" everywhere: glassmorphism, purple gradients and neon on a business tool; a fun app made dull and grey | Before designing or styling any UI |
+| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | The same "AI look" everywhere: glassmorphism, purple gradients and neon on a business tool; a fun app made dull and grey. Unlike design skills that push "bold" everywhere, it decides by purpose first | Before designing or styling any UI |
 | 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | Buttons in odd places, buried entry points, needless confirmations and extra steps; features, menus, and entry points nobody asked for | Designing or changing interactions, flows, forms, and dialogs; before calling UI work done |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | Stopping to ask the user to run a command, open a file, or paste an error it could handle itself | Before asking the user to run, check, copy, or confirm anything |
-| ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | Retreating to a fallback (software rendering, compatibility mode, a downgrade) after one odd symptom that was only a transitional state | Before abandoning the main approach for a fallback or downgrade |
 | 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | One fixed script for a process full of surprises, which keeps acting as if every step went to plan | Before scripting a long sequence against a changing system, and after a one-shot script has failed more than once |
 | 🔤 [**encoding-first**](skills/encoding-first/SKILL.md) | Saving files with non-ASCII text in whatever encoding the tool defaults to, then fixing it only after mojibake or a parse error, again and again | Before writing any file with Chinese or other non-ASCII text; at the first sign of mojibake |
 
 The **principles are platform-agnostic**. The examples lean toward Windows / PowerShell because that's where the incidents happened: Windows desktop and virtual-machine automation.
 
 > [!NOTE]
-> The skill files are currently written in Chinese. Modern LLM agents follow them fine whatever language you talk to them in. Translations are welcome; see [Contributing](#-contributing).
+> The skill bodies are currently written in Chinese, while every `description` (the part agents use to decide when to load a skill) is in English. Modern LLM agents follow them fine whatever language you talk to them in. Translations are welcome; see [Contributing](#-contributing).
 
 ### Quick reference: the agent is about to…
 
@@ -63,14 +62,13 @@ The **principles are platform-agnostic**. The examples lean toward Windows / Pow
 | Take a screenshot, open a GUI, click through an interface | 🫥 background-friendly |
 | Say "done / it exited / it's fixed" | 📸 screenshot-first |
 | Write a `sleep` to wait for a result | ⏱️ no-blind-wait |
-| Say "can't be done / not worth it" | 🔍 never-give-up-early |
+| Say "can't be done / not worth it", or switch to a fallback | 🔍 never-give-up-early |
 | Run something slow, bulk, or cross-machine | 🚀 think-about-faster-path |
 | Face "the click did nothing / it's stuck" | 🪟 dialog-handling |
 | Debug something that "suddenly" closed or changed | 🙋 maybe-it-was-the-user |
 | Pick colours, fonts, and effects for a UI | 🎨 style-fits-the-job |
 | Place buttons, design a flow, or say the UI is done | 🧭 think-like-the-user |
 | Ask the user to run a command or check something | 🛠️ just-do-it-yourself |
-| Switch to a fallback or downgraded approach | ↩️ dont-fall-back-too-soon |
 | Script a long sequence of actions from start to finish | 📜 no-blind-script |
 | Write a script or file containing non-ASCII text | 🔤 encoding-first |
 
@@ -147,7 +145,7 @@ To "take a quick look at the app", the agent kept pulling windows to the front, 
 </details>
 
 <details>
-<summary><b>↩️ dont-fall-back-too-soon</b>: an update reboot taken as proof that 3D acceleration "doesn't work"</summary>
+<summary><b>🔍 never-give-up-early</b>: an update reboot taken as proof that 3D acceleration "doesn't work"</summary>
 
 <br>
 
@@ -195,12 +193,11 @@ Copy-Item -Recurse -Force agent-rules-of-thumb\skills\* "$HOME\.claude\skills\"
 
 Feel free to copy only the skills you want. They take effect in the next new session.
 
-> [!TIP]
-> Whether a skill gets loaded depends on the agent matching its `description` to the task at hand. To make a rule **always on**, add a line to your global `~/.claude/CLAUDE.md`, for example:
->
-> ```markdown
-> - Before taking screenshots, launching or debugging GUI apps, or using computer-use, read the background-friendly skill and follow it.
-> ```
+### Always-on rules (recommended)
+
+Whether a skill gets loaded depends on the agent matching its `description` to the task. Habit rules ("before you say it's impossible...") fire at moments the agent rarely notices on its own, so the dependable setup is **skills for the details, plus one line per rule that is always in context**.
+
+[`rules/core-rules.md`](rules/core-rules.md) holds those lines (Chinese: [`rules/core-rules.zh-CN.md`](rules/core-rules.zh-CN.md)). Paste them into `~/.claude/CLAUDE.md`, `AGENTS.md`, or your agent's system prompt.
 
 ### Other agents that support Agent Skills
 
@@ -247,9 +244,13 @@ skills/
   <skill-name>/
     SKILL.md        # YAML frontmatter (name + description) + Markdown body
     scripts/        # optional: executable scripts referenced by the skill
+rules/
+  core-rules.md     # one line per skill, always on in CLAUDE.md / AGENTS.md
+evals/
+  scenarios.md      # reproducible test scenarios for each skill
 ```
 
-The `description` is the only thing the agent sees when deciding whether to load a skill, so each one states both **what it does** and **when to use it**.
+The `description` is the only thing the agent sees when deciding whether to load a skill, and the descriptions of all installed skills sit in its context at all times. So each one is a few English sentences: **the core rule + when to use it**.
 
 Each skill body follows roughly the same structure:
 
@@ -266,9 +267,10 @@ Issues and PRs are welcome, especially:
 - **New failure cases**: a mistake your agent keeps making, with the evidence (commands, output, screenshots)
 - **Other platforms**: macOS / Linux equivalents and scripts
 - **Counterexamples**: a rule that gave the wrong guidance in your situation
+- **Test results**: runs of the [test scenarios](evals/scenarios.md) with and without the skills (note the agent and model version)
 - **Translations**: of the skills themselves or of this README
 
-When adding a skill, please keep these conventions: start from a real incident; make the `description` say "what it does + when to use it"; give actionable steps, not slogans; keep scripts dependency-free and pure ASCII.
+When adding a skill, please keep these conventions: start from a real incident; write the `description` as a few English sentences: "the core rule + when to use it"; give actionable steps, not slogans; keep scripts dependency-free and pure ASCII; add a line to `rules/core-rules*.md` and a scenario to `evals/scenarios.md`.
 
 ## 📄 License
 

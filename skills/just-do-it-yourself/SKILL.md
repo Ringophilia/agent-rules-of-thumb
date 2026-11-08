@@ -1,6 +1,6 @@
 ---
 name: just-do-it-yourself
-description: 自己能完成的事就自己做，不要停下来让用户代劳。在准备对用户说"请你运行这条命令 / 你可以执行 / 请手动打开 / 请检查一下 / 请复制粘贴 / 请告诉我输出 / 请确认文件里是什么 / 需要我继续吗"之前使用：先判断这件事你有没有工具能做（运行命令、读写文件、查日志、搜索、启动程序、看截图），能做就直接做，然后汇报结果。只有真正需要用户的情况才停：需要用户的账号密码或人工验证、需要用户本人做决定或批准、操作不可逆或对外可见、超出你的权限或环境、或者会打扰用户正在使用的电脑。Use before asking the user to run, check, copy, open or confirm anything you could do with your own tools.
+description: "If your own tools can do it, do it instead of asking the user: run the command, read the file, check the log, start the program, read the output. Stop for the user only for credentials or human verification, their decision or approval, irreversible or outward-facing actions, things outside your permissions, or anything that would take over their desktop. Use before asking the user to run, check, copy, open or confirm anything."
 ---
 
 # 自己能做的，就自己做

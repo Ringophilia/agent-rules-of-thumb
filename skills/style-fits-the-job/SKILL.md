@@ -1,6 +1,6 @@
 ---
 name: style-fits-the-job
-description: 写 UI（网页、桌面程序、Electron、移动端、HTML 报告、仪表盘、组件）之前，先判断使用场景再定视觉风格：商务、生产力、内部工具、数据后台、开发者工具要克制、清晰、信息密度高；娱乐、游戏、创意、社交、个人兴趣类可以大胆用配色、插画、动效、特色字体。避免 AI 惯性风格：毛玻璃（glassmorphism）、新拟态（neumorphism）、紫蓝渐变、霓虹发光、渐变光斑背景、到处都是大圆角卡片和 emoji 图标，让严肃工具看起来像游戏；也避免把好玩的东西做成灰扑扑的后台。项目已有设计系统时照着用；场景不明确时，先给出两三个具体方向问用户。Use before designing or styling any UI, and whenever choosing colors, fonts, effects or layout density.
+description: "Choose the visual style by what the UI is for: business, productivity, internal, data and developer tools stay restrained, clear and dense; games, creative, social and hobby apps can go bold. Keep AI-default looks (glassmorphism, purple-blue gradients, neon glow, blurry blobs, emoji icons) off serious tools, and keep fun apps from looking like a grey admin panel. Follow an existing design system first. Use before designing or styling any UI."
 ---
 
 # 风格要配得上用途

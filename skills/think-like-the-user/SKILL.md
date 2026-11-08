@@ -1,6 +1,6 @@
 ---
 name: think-like-the-user
-description: 设计或修改程序的交互（按钮位置、功能入口、操作流程、表单、对话框、菜单、设置页、CLI 参数与提示）时，从第一次使用的用户角度走一遍主要任务：按钮放在用户视线和操作对象旁边，常用功能一步可达，删掉多余的确认、模式切换、向导步骤和重复输入，不加用户没要的功能、菜单、设置项和占位入口，给好默认值、即时反馈和能看懂的出错提示，遵循平台惯例。在写或改 UI、加新功能入口、设计多步流程、写表单和弹窗、或用户反映"不好用 / 找不到 / 太麻烦"时使用，交付前要实际走一遍并数步数。Use whenever you design or change how a user interacts with a program, and before declaring UI work done.
+description: "Lay out interactions in the order a first-time user works, not the order the code was written: actions next to what they act on, common tasks one step away, no extra confirmations, modes or wizard steps, no features, menus or settings nobody asked for, good defaults and clear errors. Use when designing or changing buttons, flows, forms, dialogs, menus, settings or CLI prompts; walk the main task and count steps before calling UI work done."
 ---
 
 # 站在用户的角度想交互

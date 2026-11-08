@@ -1,6 +1,6 @@
 ---
 name: background-friendly
-description: 不打扰用户的后台工作方式（Windows）。在要截图、看某个程序/窗口长什么样、启动或调试 GUI 程序/游戏/Electron/浏览器页面、点击或输入到某个程序、运行会弹窗口的命令、或准备使用 computer-use 之前使用。规则：只截目标窗口不截全屏（被遮挡或最小化也能截），多张图要对比时拼成一张带标签的网格（前后差异、连拍时间序列），程序 headless/最小化不激活地启动，用 UI Automation/CDP/日志/测试在后台操作；必须占用用户屏幕、鼠标、键盘时先请求批准，未批准就暂停；批准后优先用 computer-use，没有就用自带的键鼠脚本。Use before any screenshot, GUI launch, app debugging, UI interaction or computer-use action.
+description: "Work without disturbing a user who is using the same Windows PC: capture only the target window (never the full screen), compose several shots into one labelled grid, launch GUIs minimized and unfocused, drive them through UI Automation, CDP, logs or tests, and ask before taking over the user's screen, mouse or keyboard. Use before any screenshot, GUI launch or debugging, UI interaction, or computer-use action. Ships zero-dependency PowerShell scripts."
 compatibility: 原则通用；scripts/ 需要 Windows + PowerShell 5.1 或更高版本（uia.ps1 首次运行时用 Windows 自带的 .NET Framework csc 编译 uia.cs）
 ---
 

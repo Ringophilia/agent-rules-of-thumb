@@ -1,6 +1,6 @@
 ---
 name: maybe-it-was-the-user
-description: 用户在你工作时也在用这台电脑，程序被关掉、窗口消失、文件被改、焦点被切走、浏览器标签没了、端口没了、git 状态变了，都可能是用户自己做的（误触、顺手关掉、手动改了点东西），不一定是程序出错。在看到程序/窗口/进程突然消失或退出、文件内容和你写的不一样、状态"莫名其妙"变了，准备进入排错流程、重启、回滚或覆盖之前使用。先用退出码、事件日志、程序日志、时间线判断是崩溃还是正常关闭；像是用户操作时，简短问一句，而不是开始排错或反复重启。Use when something you launched or edited changes unexpectedly, before you start debugging it as a bug.
+description: "The user works on the same machine, so a closed window, vanished process, edited file, lost tab or changed git state may be their doing, not a bug. Use when something you launched or edited changes unexpectedly, before debugging, restarting, reverting or overwriting: check exit codes, logs and the timeline first, and if it looks like the user, ask briefly."
 ---
 
 # 先想想：会不会是用户干的

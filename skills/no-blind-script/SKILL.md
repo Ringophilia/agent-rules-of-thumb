@@ -1,6 +1,6 @@
 ---
 name: no-blind-script
-description: 写自动化脚本一口气完成多步操作之前，先判断过程中会不会出现变数：确定、可预测的批量操作（改名、格式转换、批量 API、构建）一次性脚本最快；状态会变、有随机性、依赖外部反馈的流程（游戏/GUI 自动操作、安装向导、跨机流程、网页流程、长链路部署）不能假设每一步都按预期发生，要在关键步骤前检查前置条件、遇到意外状态就停下并报告，或者改成分步执行、每步观察再决定。在准备写一个脚本"从头跑到尾"、脚本里有固定的操作序列加 sleep、或一次性脚本已经失败两次以上（尤其每次失败的地方不同）时使用。Use before writing a script that performs a long sequence of actions against a changing system, and after a one-shot script fails more than once.
+description: "A fixed end-to-end script suits deterministic work (renames, conversions, builds, batch API calls) but not changing systems (game or GUI automation, installers, web flows, VMs, long deploys): check preconditions before key steps, stop and report on unexpected state, or go step by step and observe. Use before scripting a long action sequence against a changing system, and after a one-shot script has failed twice."
 ---
 
 # 脚本不要闭着眼睛跑

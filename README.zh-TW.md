@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一覽)
+[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一覽)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安裝)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依賴腳本工具箱)
 
@@ -39,22 +39,21 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | --- | --- | --- |
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 截全螢幕、搶焦點、動使用者的滑鼠鍵盤；不問就佔用使用者的桌面 | 截圖、啟動或除錯 GUI 程式、操作程式介面、使用 computer-use 之前 |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 看不見對話框就當它不存在；沒讀內容就關掉；按程序名稱亂殺 | 點擊沒反應、程式看似當掉、指令卡住等輸入 |
-| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己試了幾次失敗，就宣布「不可行」 | 準備說「行不通 / 不值得做」之前 |
+| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己試了幾次失敗，就宣布「不可行」；主方案出現一次過渡性的異常，就退到備援方案（軟體算繪、相容模式、降級實作） | 準備說「行不通 / 不值得做」、或改用備援和降級方案之前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定時長的 sleep 等結果 | 準備寫 sleep 等某件事完成時 |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | 根據程序名稱、結束代碼等間接指標斷言狀態 | 準備說「已啟動 / 已結束 / 已修好」之前 |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 習慣性地用最熟悉、而不是最合適的工具 | 慢操作、批次操作、跨機器操作之前 |
 | 🙋 [**maybe-it-was-the-user**](skills/maybe-it-was-the-user/SKILL.md) | 使用者關掉了視窗、改了檔案，卻被當成程式出錯，開始除錯或反覆重啟 | 程式、視窗、檔案意外變化，準備除錯之前 |
-| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 不分場景套用「AI 風」：商務工具滿是毛玻璃、紫藍漸層、霓虹；娛樂應用卻做得死板 | 設計或撰寫任何 UI 樣式之前 |
+| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 不分場景套用「AI 風」：商務工具滿是毛玻璃、紫藍漸層、霓虹；娛樂應用卻做得死板。和一律鼓勵「大膽」的設計 skill 不同，這裡先看用途再定風格 | 設計或撰寫任何 UI 樣式之前 |
 | 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | 按鈕放錯地方、入口藏得深、多餘的確認和步驟；加使用者沒要的功能、選單和入口 | 設計或修改互動、流程、表單、對話框時；宣布 UI 完成之前 |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自己能跑的指令、能讀的檔案、能查的錯誤，卻停下來讓使用者去做 | 準備讓使用者執行、檢查、複製、確認任何東西之前 |
-| ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | 主方案出現一次過渡性的異常，就退到備援方案（軟體算繪、相容模式、降級實作） | 準備放棄主方案、改用備援或降級方案之前 |
 | 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 有變數的流程也用一個固定腳本跑到底，預設每一步都照預期發生 | 準備寫腳本對會變化的系統執行一長串操作之前；一次性腳本失敗兩次以上時 |
 | 🔤 [**encoding-first**](skills/encoding-first/SKILL.md) | 含中文的檔案隨工具預設編碼儲存，亂碼或報錯後才改，下次再犯 | 寫任何含中文或其他非 ASCII 字元的檔案之前；一看到亂碼時 |
 
 各條 skill 的**原則是通用的**；範例偏 Windows / PowerShell，因為它們來自 Windows 桌面與虛擬機自動化的實際經歷。
 
 > [!NOTE]
-> skill 檔案目前以簡體中文撰寫。現代 LLM 代理不論你用什麼語言對話，都能正常照著執行。歡迎協助翻譯，見[貢獻](#-貢獻)。
+> skill 正文目前以簡體中文撰寫，`description`（代理用來判斷何時載入 skill 的部分）則是英文。現代 LLM 代理不論你用什麼語言對話，都能正常照著執行。歡迎協助翻譯，見[貢獻](#-貢獻)。
 
 ### 速查：代理正準備……
 
@@ -63,14 +62,13 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 截圖、開 GUI、點介面 | 🫥 background-friendly |
 | 說「已完成 / 已結束 / 已修好」 | 📸 screenshot-first |
 | 寫 `sleep` 等結果 | ⏱️ no-blind-wait |
-| 說「做不到 / 不值得」 | 🔍 never-give-up-early |
+| 說「做不到 / 不值得」，或改用備援方案 | 🔍 never-give-up-early |
 | 跑一個慢的、批次的、跨機器的操作 | 🚀 think-about-faster-path |
 | 面對「點了沒反應 / 卡住了」 | 🪟 dialog-handling |
 | 排查「突然」關閉或變化的東西 | 🙋 maybe-it-was-the-user |
 | 為 UI 選配色、字型、效果 | 🎨 style-fits-the-job |
 | 擺按鈕、設計流程、宣布介面做完了 | 🧭 think-like-the-user |
 | 讓使用者去執行指令或檢查什麼 | 🛠️ just-do-it-yourself |
-| 改用備援或降級方案 | ↩️ dont-fall-back-too-soon |
 | 寫腳本從頭到尾執行一長串操作 | 📜 no-blind-script |
 | 寫含中文等非 ASCII 字元的腳本或檔案 | 🔤 encoding-first |
 
@@ -147,7 +145,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 </details>
 
 <details>
-<summary><b>↩️ dont-fall-back-too-soon</b>：把更新時的重新開機當成「3D 加速不可行」的證據</summary>
+<summary><b>🔍 never-give-up-early</b>：把更新時的重新開機當成「3D 加速不可行」的證據</summary>
 
 <br>
 
@@ -195,12 +193,11 @@ Copy-Item -Recurse -Force agent-rules-of-thumb\skills\* "$HOME\.claude\skills\"
 
 可以只挑需要的 skill 複製。裝好後開一個新工作階段即可生效。
 
-> [!TIP]
-> skill 是否被載入，取決於代理自己判斷 `description` 和目前任務是否相符。如果希望某條規則**一律生效**，可以在全域 `~/.claude/CLAUDE.md` 裡加一行，例如：
->
-> ```markdown
-> - 截圖、啟動或除錯 GUI 程式、使用 computer-use 之前，先讀 background-friendly skill 並照做。
-> ```
+### 常駐規則（推薦）
+
+skill 是否被載入，取決於代理自己判斷 `description` 和目前任務是否相符。「準備說做不到之前」這類習慣型規則，觸發的時機代理自己很難察覺，所以最可靠的用法是：**skill 放細節，再把每條規則的一句話常駐在上下文裡**。
+
+[`rules/core-rules.zh-CN.md`](rules/core-rules.zh-CN.md)（簡體中文）和 [`rules/core-rules.md`](rules/core-rules.md)（英文）就是這些句子，整段貼進 `~/.claude/CLAUDE.md`、`AGENTS.md` 或代理的系統提示詞即可。
 
 ### 其他支援 Agent Skills 標準的代理
 
@@ -246,9 +243,13 @@ skills/
   <skill-name>/
     SKILL.md        # YAML frontmatter（name + description）+ Markdown 正文
     scripts/        # 選用：skill 裡引用的可執行腳本
+rules/
+  core-rules.md     # 每條 skill 一句話，放進 CLAUDE.md / AGENTS.md 常駐
+evals/
+  scenarios.md      # 每條 skill 的可重現測試情境
 ```
 
-`description` 是代理決定「要不要載入這個 skill」的唯一依據，所以裡面同時寫了**做什麼**和**什麼時候用**。
+`description` 是代理決定「要不要載入這個 skill」的唯一依據，而且所有已安裝 skill 的 description 會一直佔著上下文，所以統一用幾句英文寫成：**核心規則 + 什麼時候用**。
 
 每條 skill 的正文大致按同一個結構組織：
 
@@ -265,9 +266,10 @@ skills/
 - **新的翻車案例**：你的代理反覆犯的某個錯，附上當時的現場（指令、輸出、截圖）
 - **其他平台的範例**：macOS / Linux 下的等價做法和腳本
 - **反例**：某條規則在你的情境裡給出了錯誤的指引
+- **測試結果**：用[測試情境](evals/scenarios.md)比較裝與不裝 skill 的表現（註明代理和模型版本）
 - **翻譯**：skill 本身或本 README 的其他語言版本
 
-新增 skill 時請維持這幾個慣例：從真實案例出發；`description` 寫清「做什麼 + 什麼時候用」；正文給出可執行的步驟而不是口號；腳本零依賴、純 ASCII。
+新增 skill 時請維持這幾個慣例：從真實案例出發；`description` 用幾句英文寫清「核心規則 + 什麼時候用」；正文給出可執行的步驟而不是口號；腳本零依賴、純 ASCII；同時在 `rules/core-rules*.md` 裡加一句常駐規則，在 `evals/scenarios.md` 裡加一個測試情境。
 
 ## 📄 授權
 

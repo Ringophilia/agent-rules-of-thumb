@@ -1,6 +1,6 @@
 ---
 name: dialog-handling
-description: 处理阻塞式交互：Windows 对话框、网页模态框、浏览器原生 alert/confirm、终端 y/n 或密码提示、分页器、安装向导、二次验证。当点击"没反应"、程序看似卡死、命令长时间无输出但进程还活着、弹窗关不掉、或需要靠弹窗内容判断当前状态时使用。这类阻塞物常被遮挡而截图看不到、没有标准控件 ID、不响应常规关闭消息，有时它本身就是解决问题的入口。给出预防 → 发现 → 读取 → 判定 → 处理 → 循环的完整流程，附可直接运行的 Windows 窗口枚举与按钮点击脚本。Use when a click does nothing, an app looks frozen, a CLI hangs waiting for input, or a modal/dialog blocks automation.
+description: "Handle anything that blocks waiting for an answer: Windows dialogs (often hidden behind other windows), web modals, browser alert/confirm, CLI y/n or password prompts, pagers, installers. Prevent them with non-interactive flags, find them by enumerating windows rather than by screenshot, and read them before dismissing, since the dialog may be the way forward. Use when a click does nothing, an app looks frozen, or a command hangs with no output."
 compatibility: 原则通用；scripts/ 需要 Windows + PowerShell 5.1 或更高版本
 ---
 

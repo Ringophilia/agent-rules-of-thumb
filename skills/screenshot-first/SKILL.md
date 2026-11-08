@@ -1,6 +1,6 @@
 ---
 name: screenshot-first
-description: 判断程序、GUI、服务、构建"现在到底是什么状态"时，优先取最接近最终效果的一手证据（截图、渲染结果、真实响应体、实际产物），而不是进程名、状态字段、退出码、"构建成功"这类间接指标；两者冲突时以一手证据为准，并追查为什么会冲突。在准备根据进程列表、日志、退出码断言"已启动 / 已退出 / 已成功 / 已修好"之前，间接指标与预期不符时，或怀疑状态被缓存、伪装、跨 session 隔离时使用。Use before claiming something started, exited, works, or is fixed.
+description: "Judge state from first-hand evidence (screenshot, rendered output, real response body, the actual artifact), not from process names, exit codes, status fields or 'build succeeded'; when they conflict, trust the first-hand evidence and find out why the indirect signal was wrong. Use before claiming something started, exited, works or is fixed, and say 'unverified' when you cannot get that evidence."
 ---
 
 # 一手证据优先

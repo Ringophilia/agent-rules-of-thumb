@@ -1,6 +1,6 @@
 ---
 name: think-about-faster-path
-description: 预计耗时超过约 10 秒，或者要重复、批量、跨机执行的操作，动手前先花十秒比较实现路径：有没有原生工具、能不能并行、能不能一次做完、能不能就地处理免传输、能不能干脆不做。同一个目标常有数量级差异的做法，习惯性选最熟悉的那个是主要的成本来源。在传输大文件、批量处理文件、循环调用远程命令或 API、逐条查询、逐字节扫描、逐个读文件，或某一步明显比预期慢时使用。Use before slow, repetitive, bulk, or remote operations, and whenever a step is much slower than expected.
+description: "Before an operation that takes more than ~10 seconds or is repeated, bulk or cross-machine, spend ten seconds comparing paths: skip it, a native tool, parallelism, one batch call, processing where the data lives. The habitual tool is often an order of magnitude slower. Use before transfers, bulk file work, looped remote or API calls, and whenever a step is much slower than expected."
 ---
 
 # 先想有没有更快的做法

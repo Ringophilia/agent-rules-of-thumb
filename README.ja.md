@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-13-blue.svg)](#-skills-一覧)
+[![Skills](https://img.shields.io/badge/skills-12-blue.svg)](#-skills-一覧)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-インストール)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-依存ゼロのスクリプト集)
 
@@ -39,22 +39,21 @@ AI エージェントが失敗する理由は「できないから」より、�
 | --- | --- | --- |
 | 🫥 [**background-friendly**](skills/background-friendly/SKILL.md) | 全画面スクショ、フォーカスを奪う、許可なくユーザーのマウスとキーボードを使う | スクリーンショット、GUI アプリの起動・デバッグ、UI 操作、computer-use を使う前 |
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 見えないダイアログは存在しないとみなす。内容を読まずに閉じる。プロセス名でまとめて kill する | クリックが効かない、アプリが固まったように見える、コマンドが入力待ちで止まった |
-| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自分で数回試して失敗しただけで「不可能」と宣言する | 「うまくいかない / やる価値がない」と言う前 |
+| 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自分で数回試して失敗しただけで「不可能」と宣言する。一時的な状態にすぎない異常を一度見ただけで、フォールバック（ソフトウェアレンダリング、互換モード、機能縮小）に退く | 「うまくいかない / やる価値がない」と言う前、フォールバックや機能縮小に切り替える前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 固定時間の sleep で結果を待つ | 何かの完了を sleep で待とうとしたとき |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | プロセス名や終了コードなど間接的な指標で状態を断定する | 「起動した / 終了した / 直った」と言う前 |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 最適なツールではなく、使い慣れたツールを惰性で使う | 時間のかかる操作、一括処理、マシンをまたぐ操作の前 |
 | 🙋 [**maybe-it-was-the-user**](skills/maybe-it-was-the-user/SKILL.md) | ユーザーが閉じたウィンドウや編集したファイルをバグとみなし、デバッグや再起動を繰り返す | プログラム・ウィンドウ・ファイルが予期せず変わり、デバッグを始める前 |
-| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 場面を問わず「AI っぽい」見た目：業務ツールにすりガラス・紫青グラデーション・ネオン、娯楽アプリは逆に味気ない | UI のデザインやスタイリングを始める前 |
+| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 場面を問わず「AI っぽい」見た目：業務ツールにすりガラス・紫青グラデーション・ネオン、娯楽アプリは逆に味気ない。一律に「大胆に」と勧めるデザイン skill と違い、まず用途で決める | UI のデザインやスタイリングを始める前 |
 | 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | ボタンの配置が不自然、入口が深い、不要な確認や手順が多い、頼まれていない機能・メニュー・入口を足す | 操作・フロー・フォーム・ダイアログを設計・変更するとき、UI 完成と言う前 |
 | 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自分で実行できるコマンド、読めるファイル、調べられるエラーなのに、止まってユーザーにやらせる | ユーザーに実行・確認・コピー・承認を頼む前 |
-| ↩️ [**dont-fall-back-too-soon**](skills/dont-fall-back-too-soon/SKILL.md) | 一時的な状態にすぎない異常を一度見ただけで、フォールバック（ソフトウェアレンダリング、互換モード、機能縮小）に退く | 本来の方針を捨ててフォールバックや機能縮小に切り替える前 |
 | 📜 [**no-blind-script**](skills/no-blind-script/SKILL.md) | 不確定要素のある処理も固定スクリプトで最後まで流し、各ステップが想定どおりに起きたとみなす | 変化するシステムに対して長い操作列をスクリプト化する前、使い切りスクリプトが 2 回以上失敗したとき |
 | 🔤 [**encoding-first**](skills/encoding-first/SKILL.md) | 非 ASCII 文字を含むファイルをツール既定のエンコーディングで保存し、文字化けやエラーが出てから直す。それを何度も繰り返す | 中国語・日本語など非 ASCII 文字を含むファイルを書く前、文字化けに気づいたとき |
 
 各 skill の**原則はプラットフォームに依存しません**。例が Windows / PowerShell 寄りなのは、Windows デスクトップと仮想マシンの自動化で実際に起きた出来事が元になっているからです。
 
 > [!NOTE]
-> skill ファイル本体は現在中国語で書かれています。最近の LLM エージェントは、会話の言語にかかわらず問題なく従います。翻訳も歓迎します（[コントリビュート](#-コントリビュート)を参照）。
+> skill の本文は現在中国語で書かれていますが、`description`（エージェントが skill を読み込むかどうかを判断する部分）は英語です。最近の LLM エージェントは、会話の言語にかかわらず問題なく従います。翻訳も歓迎します（[コントリビュート](#-コントリビュート)を参照）。
 
 ### 早見表：エージェントが今まさに……
 
@@ -63,14 +62,13 @@ AI エージェントが失敗する理由は「できないから」より、�
 | スクショを撮る、GUI を開く、画面を操作する | 🫥 background-friendly |
 | 「完了 / 終了した / 直った」と言う | 📸 screenshot-first |
 | 結果待ちに `sleep` を書く | ⏱️ no-blind-wait |
-| 「できない / やる価値がない」と言う | 🔍 never-give-up-early |
+| 「できない / やる価値がない」と言う、フォールバックに切り替える | 🔍 never-give-up-early |
 | 遅い・一括・マシンをまたぐ処理を走らせる | 🚀 think-about-faster-path |
 | 「クリックが効かない / 固まった」に直面した | 🪟 dialog-handling |
 | 「突然」閉じた・変わったものをデバッグする | 🙋 maybe-it-was-the-user |
 | UI の配色・フォント・エフェクトを選ぶ | 🎨 style-fits-the-job |
 | ボタンを配置する、フローを設計する、UI 完成と言う | 🧭 think-like-the-user |
 | ユーザーにコマンド実行や確認を頼む | 🛠️ just-do-it-yourself |
-| フォールバックや機能縮小に切り替える | ↩️ dont-fall-back-too-soon |
 | 長い操作列を最初から最後までスクリプトで流す | 📜 no-blind-script |
 | 非 ASCII 文字を含むスクリプトやファイルを書く | 🔤 encoding-first |
 
@@ -147,7 +145,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 </details>
 
 <details>
-<summary><b>↩️ dont-fall-back-too-soon</b>：更新中の再起動を「3D アクセラレーションは無理」の証拠にした</summary>
+<summary><b>🔍 never-give-up-early</b>：更新中の再起動を「3D アクセラレーションは無理」の証拠にした</summary>
 
 <br>
 
@@ -195,12 +193,11 @@ Copy-Item -Recurse -Force agent-rules-of-thumb\skills\* "$HOME\.claude\skills\"
 
 必要な skill だけをコピーしても構いません。次に新しいセッションを開いたときから有効になります。
 
-> [!TIP]
-> skill が読み込まれるかどうかは、エージェントが `description` と目の前のタスクが合うかを自分で判断して決まります。あるルールを**常に有効**にしたい場合は、グローバルの `~/.claude/CLAUDE.md` に 1 行加えてください。例：
->
-> ```markdown
-> - スクリーンショット、GUI アプリの起動・デバッグ、computer-use の前に、background-friendly skill を読んで従うこと。
-> ```
+### 常時有効のルール（推奨）
+
+skill が読み込まれるかどうかは、エージェントが `description` と目の前のタスクが合うかを自分で判断して決まります。「不可能と言う前に」のような癖を正すルールは、発動すべき瞬間にエージェント自身が気づきにくいため、**詳細は skill に置き、各ルールの要点 1 行を常にコンテキストに入れておく**のが確実です。
+
+[`rules/core-rules.md`](rules/core-rules.md)（英語）と [`rules/core-rules.zh-CN.md`](rules/core-rules.zh-CN.md)（中国語）がその 1 行集です。`~/.claude/CLAUDE.md`、`AGENTS.md`、またはエージェントのシステムプロンプトにそのまま貼り付けてください。
 
 ### Agent Skills 標準に対応したその他のエージェント
 
@@ -247,9 +244,13 @@ skills/
   <skill-name>/
     SKILL.md        # YAML frontmatter（name + description）+ Markdown 本文
     scripts/        # 任意：skill から参照される実行可能スクリプト
+rules/
+  core-rules.md     # skill ごとの 1 行ルール。CLAUDE.md / AGENTS.md に常駐させる
+evals/
+  scenarios.md      # skill ごとの再現可能なテストシナリオ
 ```
 
-エージェントが skill を読み込むかどうかを判断する材料は `description` だけです。そのため、どの skill にも**何をするか**と**いつ使うか**の両方を書いています。
+エージェントが skill を読み込むかどうかを判断する材料は `description` だけで、しかもインストールされた全 skill の description は常にコンテキストを占めます。そのため、どれも英語の数文で**核心のルール + いつ使うか**を書いています。
 
 各 skill の本文はおおむね同じ構成です。
 
@@ -266,9 +267,10 @@ Issue と PR を歓迎します。特に次のようなものを歓迎します�
 - **新しい失敗例**：あなたのエージェントが繰り返す失敗。当時の状況（コマンド、出力、スクリーンショット）を添えて
 - **他プラットフォームの例**：macOS / Linux での同等の手順やスクリプト
 - **反例**：あるルールがあなたの状況では誤った指針になった
+- **テスト結果**：[テストシナリオ](evals/scenarios.md)で skill あり・なしの挙動を比べた記録（エージェントとモデルのバージョンを明記）
 - **翻訳**：skill 本体やこの README の各言語版
 
-skill を追加するときは次の約束事を守ってください。実際の出来事から出発すること。`description` には「何をするか + いつ使うか」を書くこと。本文はスローガンではなく実行可能な手順にすること。スクリプトは依存ゼロ・純粋な ASCII にすること。
+skill を追加するときは次の約束事を守ってください。実際の出来事から出発すること。`description` は英語の数文で「核心のルール + いつ使うか」を書くこと。本文はスローガンではなく実行可能な手順にすること。スクリプトは依存ゼロ・純粋な ASCII にすること。あわせて `rules/core-rules*.md` に 1 行ルールを、`evals/scenarios.md` にテストシナリオを追加すること。
 
 ## 📄 ライセンス
 
