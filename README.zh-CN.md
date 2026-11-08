@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-6-blue.svg)](#-skills-一览)
+[![Skills](https://img.shields.io/badge/skills-10-blue.svg)](#-skills-一览)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安装)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依赖脚本工具箱)
 
@@ -43,6 +43,10 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定时长的 sleep 等结果 | 准备写 sleep 等某件事完成时 |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | 根据进程名、退出码等间接指标断言状态 | 准备说"已启动 / 已退出 / 已修好"之前 |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 习惯性地用最熟悉、而不是最合适的工具 | 慢操作、批量操作、跨机操作之前 |
+| 🙋 [**maybe-it-was-the-user**](skills/maybe-it-was-the-user/SKILL.md) | 用户关掉了窗口、改了文件，却被当成程序出错，开始排错或反复重启 | 程序、窗口、文件意外变化，准备排错之前 |
+| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 不分场景套用"AI 风"：商务工具满是毛玻璃、紫蓝渐变、霓虹；娱乐应用却做得死板 | 设计或编写任何 UI 样式之前 |
+| 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | 按钮放错地方、入口藏得深、多余的确认和步骤；加用户没要的功能、菜单和入口 | 设计或修改交互、流程、表单、弹窗时；宣布 UI 完成之前 |
+| 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自己能跑的命令、能读的文件、能查的报错，却停下来让用户去做 | 准备让用户运行、检查、复制、确认任何东西之前 |
 
 各条 skill 的**原则是通用的**；示例偏 Windows / PowerShell，因为它们来自 Windows 桌面与虚拟机自动化的实际经历。
 
@@ -56,6 +60,10 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | 说"做不到 / 不值得" | 🔍 never-give-up-early |
 | 跑一个慢的、批量的、跨机的操作 | 🚀 think-about-faster-path |
 | 面对"点了没反应 / 卡住了" | 🪟 dialog-handling |
+| 排查"突然"关闭或变化的东西 | 🙋 maybe-it-was-the-user |
+| 给 UI 选配色、字体、效果 | 🎨 style-fits-the-job |
+| 摆按钮、设计流程、宣布界面做完了 | 🧭 think-like-the-user |
+| 让用户去运行命令或检查什么 | 🛠️ just-do-it-yourself |
 
 ## 🔥 它们从哪来
 

@@ -11,7 +11,7 @@ that correct the most common and most expensive habits of AI agents doing automa
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-6-blue.svg)](#-the-skills)
+[![Skills](https://img.shields.io/badge/skills-10-blue.svg)](#-the-skills)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-installation)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-zero-dependency-script-toolbox)
 
@@ -43,6 +43,10 @@ None of these make a task fail outright. They make it **ten times slower, reach 
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | Waiting for results with fixed-length sleeps | When about to write a sleep to wait for something |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | Asserting state from indirect signals like process names and exit codes | Before saying "it started / it exited / it's fixed" |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | Using the most familiar tool instead of the most suitable one | Before slow, bulk, repetitive, or cross-machine operations |
+| 🙋 [**maybe-it-was-the-user**](skills/maybe-it-was-the-user/SKILL.md) | Treating a window the user closed, or a file the user edited, as a bug, then debugging it or restarting it over and over | A program, window, or file changes unexpectedly, before you start debugging it |
+| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | The same "AI look" everywhere: glassmorphism, purple gradients and neon on a business tool; a fun app made dull and grey | Before designing or styling any UI |
+| 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | Buttons in odd places, buried entry points, needless confirmations and extra steps; features, menus, and entry points nobody asked for | Designing or changing interactions, flows, forms, and dialogs; before calling UI work done |
+| 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | Stopping to ask the user to run a command, open a file, or paste an error it could handle itself | Before asking the user to run, check, copy, or confirm anything |
 
 The **principles are platform-agnostic**. The examples lean toward Windows / PowerShell because that's where the incidents happened: Windows desktop and virtual-machine automation.
 
@@ -59,6 +63,10 @@ The **principles are platform-agnostic**. The examples lean toward Windows / Pow
 | Say "can't be done / not worth it" | 🔍 never-give-up-early |
 | Run something slow, bulk, or cross-machine | 🚀 think-about-faster-path |
 | Face "the click did nothing / it's stuck" | 🪟 dialog-handling |
+| Debug something that "suddenly" closed or changed | 🙋 maybe-it-was-the-user |
+| Pick colours, fonts, and effects for a UI | 🎨 style-fits-the-job |
+| Place buttons, design a flow, or say the UI is done | 🧭 think-like-the-user |
+| Ask the user to run a command or check something | 🛠️ just-do-it-yourself |
 
 ## 🔥 Where they come from
 

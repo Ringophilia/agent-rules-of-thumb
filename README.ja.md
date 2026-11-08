@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-6-blue.svg)](#-skills-一覧)
+[![Skills](https://img.shields.io/badge/skills-10-blue.svg)](#-skills-一覧)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-インストール)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-依存ゼロのスクリプト集)
 
@@ -43,6 +43,10 @@ AI エージェントが失敗する理由は「できないから」より、�
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 固定時間の sleep で結果を待つ | 何かの完了を sleep で待とうとしたとき |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | プロセス名や終了コードなど間接的な指標で状態を断定する | 「起動した / 終了した / 直った」と言う前 |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 最適なツールではなく、使い慣れたツールを惰性で使う | 時間のかかる操作、一括処理、マシンをまたぐ操作の前 |
+| 🙋 [**maybe-it-was-the-user**](skills/maybe-it-was-the-user/SKILL.md) | ユーザーが閉じたウィンドウや編集したファイルをバグとみなし、デバッグや再起動を繰り返す | プログラム・ウィンドウ・ファイルが予期せず変わり、デバッグを始める前 |
+| 🎨 [**style-fits-the-job**](skills/style-fits-the-job/SKILL.md) | 場面を問わず「AI っぽい」見た目：業務ツールにすりガラス・紫青グラデーション・ネオン、娯楽アプリは逆に味気ない | UI のデザインやスタイリングを始める前 |
+| 🧭 [**think-like-the-user**](skills/think-like-the-user/SKILL.md) | ボタンの配置が不自然、入口が深い、不要な確認や手順が多い、頼まれていない機能・メニュー・入口を足す | 操作・フロー・フォーム・ダイアログを設計・変更するとき、UI 完成と言う前 |
+| 🛠️ [**just-do-it-yourself**](skills/just-do-it-yourself/SKILL.md) | 自分で実行できるコマンド、読めるファイル、調べられるエラーなのに、止まってユーザーにやらせる | ユーザーに実行・確認・コピー・承認を頼む前 |
 
 各 skill の**原則はプラットフォームに依存しません**。例が Windows / PowerShell 寄りなのは、Windows デスクトップと仮想マシンの自動化で実際に起きた出来事が元になっているからです。
 
@@ -59,6 +63,10 @@ AI エージェントが失敗する理由は「できないから」より、�
 | 「できない / やる価値がない」と言う | 🔍 never-give-up-early |
 | 遅い・一括・マシンをまたぐ処理を走らせる | 🚀 think-about-faster-path |
 | 「クリックが効かない / 固まった」に直面した | 🪟 dialog-handling |
+| 「突然」閉じた・変わったものをデバッグする | 🙋 maybe-it-was-the-user |
+| UI の配色・フォント・エフェクトを選ぶ | 🎨 style-fits-the-job |
+| ボタンを配置する、フローを設計する、UI 完成と言う | 🧭 think-like-the-user |
+| ユーザーにコマンド実行や確認を頼む | 🛠️ just-do-it-yourself |
 
 ## 🔥 それぞれの由来
 
