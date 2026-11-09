@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Agent Rules of Thumb">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#F0A04B" stroke-width="3.6">
+      <path d="M22 46.5H29.5M22 55H35M22 63.5H29.5M22 72H35M22 80.5H29.5"/>
+    </g>
+    <g stroke="#E6EDF3" stroke-width="6">
+      <path d="M26 38H28C33 38 37.8 32 37.8 26V15.5C37.8 12.5 40.3 10.5 43.5 10.5C50 10.5 54.5 16.5 54 25C53.7 30 52.3 34.5 50.5 38H71A7.25 7.25 0 0 1 71 52.5H70A6.75 6.75 0 0 1 70 66H66.5A6.25 6.25 0 0 1 66.5 78.5H63.5A5.25 5.25 0 0 1 63.5 89H26Q21 89 21 84V43Q21 38 26 38Z"/>
+      <path d="M62 52.5H70M59.5 66H66.5M57 78.5H63.5"/>
+    </g>
+  </g>
+</svg>

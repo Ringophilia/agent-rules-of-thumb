@@ -2,6 +2,11 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | **繁體中文** | [日本語](README.ja.md)
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+  <img src="assets/logo-light.svg" alt="Agent Rules of Thumb logo" width="128">
+</picture>
+
 # Agent Rules of Thumb
 
 **讓 AI 代理少走冤枉路的經驗法則**
