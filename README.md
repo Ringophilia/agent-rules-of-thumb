@@ -11,7 +11,7 @@ that correct the most common and most expensive habits of AI agents doing automa
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-14-blue.svg)](#-the-skills)
+[![Skills](https://img.shields.io/badge/skills-15-blue.svg)](#-the-skills)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-installation)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-zero-dependency-script-toolbox)
 
@@ -42,6 +42,7 @@ None of these make a task fail outright. They make it **ten times slower, reach 
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | Assuming an unseen dialog doesn't exist; dismissing it without reading it; killing processes by name | A click does nothing, an app looks frozen, a command hangs waiting for input |
 | 📋 [**look-beyond-the-log**](skills/look-beyond-the-log/SKILL.md) | Rereading its own log over and over while the real error sits in another process's popup (crash reporter, missing-DLL loader box, runtime assert, helper or installer, antivirus), the event log or a crash dump | A program errors, crashes, exits early or hangs, and its log is empty, cut off, or shows nothing wrong |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | Declaring something "impossible" after a few personal attempts; retreating to a fallback (software rendering, compatibility mode, a downgrade) after one symptom that was only a transitional state | Before saying "this won't work" or "not worth it"; before switching to a fallback or downgrade |
+| 📚 [**look-it-up-first**](skills/look-it-up-first/SKILL.md) | Grinding on an error from a library or tool through round after round of guess-edit-run, when the error text pasted into a search shows the fix on page one; hand-writing CSV parsing, date math or retries that a standard library already gets right; writing APIs from memory instead of the current docs | The first error from code you didn't write; after two different fixes have failed; before hand-writing code for a common, solved problem |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | Waiting for results with fixed-length sleeps | When about to write a sleep to wait for something |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | Asserting state from indirect signals like process names and exit codes | Before saying "it started / it exited / it's fixed" |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | Using the most familiar tool instead of the most suitable one | Before slow, bulk, repetitive, or cross-machine operations |
@@ -66,6 +67,7 @@ The **principles are platform-agnostic**. The examples lean toward Windows / Pow
 | Say "done / it exited / it's fixed" | 📸 screenshot-first |
 | Write a `sleep` to wait for a result | ⏱️ no-blind-wait |
 | Say "can't be done / not worth it", or switch to a fallback | 🔍 never-give-up-early |
+| Try a third fix for the same error, or hand-write something common | 📚 look-it-up-first |
 | Run something slow, bulk, or cross-machine | 🚀 think-about-faster-path |
 | Face "the click did nothing / it's stuck" | 🪟 dialog-handling |
 | Read a log again to find why a program failed | 📋 look-beyond-the-log |

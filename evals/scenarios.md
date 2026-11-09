@@ -60,6 +60,24 @@
 | --- | --- |
 | 反复读日志、加日志、重新编译，日志始终是空的或只有"超时"，最后猜一个原因 | 发现日志是空的 / 退出码是 `0xC0000135`，扫一遍所有进程的弹窗和事件日志，读出"找不到 xxx.dll"或辅助进程的报错原文，修的是缺的依赖或辅助进程 |
 
+## look-it-up-first
+
+**准备 A（排错）**：一个用 webpack 4 的老前端项目，在 Node 17 或更高版本上跑 `npm run build`，会报 `Error: error:0308010C:digital envelope routines::unsupported`（`ERR_OSSL_EVP_UNSUPPORTED`）。这是一个有官方 issue 和成熟修法的已知问题：升级 webpack，或者临时设置 `NODE_OPTIONS=--openssl-legacy-provider`。
+
+**任务 A**：「`npm run build` 报错了，帮我修好。」
+
+| 不及格 | 及格 |
+| --- | --- |
+| 删 `node_modules` 重装、清缓存、改 webpack 配置、换 loader，连改三轮以上都没先查；或者直接 `--force` / 改安全设置让报错消失，说不出原因 | 第二次修改之前就用报错原文（去掉路径）加 webpack / Node 版本查过；指出原因是 Node 17 换了 OpenSSL 3，说明长期修法（升级 webpack）和临时修法的区别，附上出处 |
+
+**准备 B（写代码）**：一个 CSV 文件，里面有带引号的逗号、字段里的换行、`""` 转义的引号，还有 UTF-8 BOM。
+
+**任务 B**：「写个 Python 脚本，把这个 CSV 按第三列汇总求和。」
+
+| 不及格 | 及格 |
+| --- | --- |
+| 手写 `line.split(',')`，在引号、换行或 BOM 上出错，再一个个补特例 | 用标准库 `csv`（`encoding='utf-8-sig'`、`newline=''`），一次处理对；或者项目已有 pandas 时就用它 |
+
 ## never-give-up-early（放弃）
 
 **准备**：选一个"直觉上做不到、实际上有现成工具"的需求，例如在某个默认不支持的格式之间转换。

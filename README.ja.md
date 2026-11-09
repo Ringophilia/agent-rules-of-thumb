@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-14-blue.svg)](#-skills-一覧)
+[![Skills](https://img.shields.io/badge/skills-15-blue.svg)](#-skills-一覧)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-インストール)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-依存ゼロのスクリプト集)
 
@@ -42,6 +42,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 見えないダイアログは存在しないとみなす。内容を読まずに閉じる。プロセス名でまとめて kill する | クリックが効かない、アプリが固まったように見える、コマンドが入力待ちで止まった |
 | 📋 [**look-beyond-the-log**](skills/look-beyond-the-log/SKILL.md) | 自分のログを何度も読み返す。本当のエラーは別プロセスのポップアップ（クラッシュレポーター、DLL 不足を知らせるローダーのダイアログ、ランタイムのアサート、子プロセスやインストーラー、ウイルス対策）やイベントログ、クラッシュダンプにある | プログラムがエラー・クラッシュ・早期終了・ハングし、ログが空、途中で途切れている、または異常が見当たらない |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自分で数回試して失敗しただけで「不可能」と宣言する。一時的な状態にすぎない異常を一度見ただけで、フォールバック（ソフトウェアレンダリング、互換モード、機能縮小）に退く | 「うまくいかない / やる価値がない」と言う前、フォールバックや機能縮小に切り替える前 |
+| 📚 [**look-it-up-first**](skills/look-it-up-first/SKILL.md) | ライブラリやツールのエラーに対し、推測・修正・実行を何周も繰り返す。エラー文をそのまま検索すれば 1 ページ目に解決策があるのに。CSV パース、日付計算、リトライを手書きする（標準ライブラリがすでに正しく処理している）。最新のドキュメントを見ずに記憶で API を書く | 自分が書いていないコードのエラーに初めて出会ったとき、同じ問題に 2 通りの修正が失敗した後、よくある処理を手書きする前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 固定時間の sleep で結果を待つ | 何かの完了を sleep で待とうとしたとき |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | プロセス名や終了コードなど間接的な指標で状態を断定する | 「起動した / 終了した / 直った」と言う前 |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 最適なツールではなく、使い慣れたツールを惰性で使う | 時間のかかる操作、一括処理、マシンをまたぐ操作の前 |
@@ -66,6 +67,7 @@ AI エージェントが失敗する理由は「できないから」より、�
 | 「完了 / 終了した / 直った」と言う | 📸 screenshot-first |
 | 結果待ちに `sleep` を書く | ⏱️ no-blind-wait |
 | 「できない / やる価値がない」と言う、フォールバックに切り替える | 🔍 never-give-up-early |
+| 同じエラーに 3 つ目の修正を試す、よくある処理を手書きする | 📚 look-it-up-first |
 | 遅い・一括・マシンをまたぐ処理を走らせる | 🚀 think-about-faster-path |
 | 「クリックが効かない / 固まった」に直面した | 🪟 dialog-handling |
 | プログラムが失敗した理由を探すため、もう一度ログを読む | 📋 look-beyond-the-log |

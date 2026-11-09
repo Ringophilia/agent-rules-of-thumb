@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-14-blue.svg)](#-skills-一覽)
+[![Skills](https://img.shields.io/badge/skills-15-blue.svg)](#-skills-一覽)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安裝)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依賴腳本工具箱)
 
@@ -42,6 +42,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 看不見對話框就當它不存在；沒讀內容就關掉；按程序名稱亂殺 | 點擊沒反應、程式看似當掉、指令卡住等輸入 |
 | 📋 [**look-beyond-the-log**](skills/look-beyond-the-log/SKILL.md) | 一遍遍讀自己的日誌，真正的錯誤卻在別的程序的對話框（當機回報、缺 DLL 的系統提示、執行階段斷言、子程序或安裝程式、防毒軟體）、事件記錄或傾印檔裡 | 程式報錯、當掉、提早結束或卡住，而日誌是空的、斷在半截，或看不出問題 |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己試了幾次失敗，就宣布「不可行」；主方案出現一次過渡性的異常，就退到備援方案（軟體算繪、相容模式、降級實作） | 準備說「行不通 / 不值得做」、或改用備援和降級方案之前 |
+| 📚 [**look-it-up-first**](skills/look-it-up-first/SKILL.md) | 第三方函式庫或工具報錯，自己猜、改、跑一輪又一輪，其實把錯誤原文拿去搜，第一頁就有修法；手寫 CSV 解析、日期計算、重試，標準函式庫早就處理好了；憑記憶寫 API，不看當前版本的文件 | 第一次遇到不是自己程式碼報的錯；同一問題兩種修法都失敗之後；手寫通用功能之前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定時長的 sleep 等結果 | 準備寫 sleep 等某件事完成時 |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | 根據程序名稱、結束代碼等間接指標斷言狀態 | 準備說「已啟動 / 已結束 / 已修好」之前 |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 習慣性地用最熟悉、而不是最合適的工具 | 慢操作、批次操作、跨機器操作之前 |
@@ -66,6 +67,7 @@ AI 代理很少因為「不會」而失敗，更多是因為**習慣**：
 | 說「已完成 / 已結束 / 已修好」 | 📸 screenshot-first |
 | 寫 `sleep` 等結果 | ⏱️ no-blind-wait |
 | 說「做不到 / 不值得」，或改用備援方案 | 🔍 never-give-up-early |
+| 同一個錯誤準備試第三種修法，或者手寫通用功能 | 📚 look-it-up-first |
 | 跑一個慢的、批次的、跨機器的操作 | 🚀 think-about-faster-path |
 | 面對「點了沒反應 / 卡住了」 | 🪟 dialog-handling |
 | 為了找程式失敗的原因，又要去讀一遍日誌 | 📋 look-beyond-the-log |

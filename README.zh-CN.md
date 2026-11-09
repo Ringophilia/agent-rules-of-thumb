@@ -11,7 +11,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-8A2BE2.svg)](https://agentskills.io)
-[![Skills](https://img.shields.io/badge/skills-14-blue.svg)](#-skills-一览)
+[![Skills](https://img.shields.io/badge/skills-15-blue.svg)](#-skills-一览)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97757.svg)](#-安装)
 [![PowerShell 5.1+](https://img.shields.io/badge/scripts-PowerShell%205.1%2B-5391FE.svg)](#-零依赖脚本工具箱)
 
@@ -42,6 +42,7 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | 🪟 [**dialog-handling**](skills/dialog-handling/SKILL.md) | 看不见弹窗就当它不存在；没读内容就点掉；按进程名乱杀 | 点击没反应、程序看似卡死、命令挂住等输入 |
 | 📋 [**look-beyond-the-log**](skills/look-beyond-the-log/SKILL.md) | 一遍遍读自己的日志，真正的报错却在别的进程的弹窗（崩溃报告、缺 DLL 的系统提示、运行库断言、子进程或安装器、杀软）、事件日志或崩溃转储里 | 程序报错、崩溃、提前退出或卡住，而日志是空的、断在半截，或者看不出问题 |
 | 🔍 [**never-give-up-early**](skills/never-give-up-early/SKILL.md) | 自己试了几次失败，就宣布"不可行"；主方案出现一次过渡性的异常，就退到兜底方案（软件渲染、兼容模式、降级实现） | 准备说"走不通 / 不值得做"、或改用兜底和降级方案之前 |
+| 📚 [**look-it-up-first**](skills/look-it-up-first/SKILL.md) | 第三方库或工具报错，自己猜、改、跑一轮又一轮，其实报错原文一搜，第一页就有修法；手写 CSV 解析、日期计算、重试，标准库早就处理好了；凭记忆写 API，不看当前版本的文档 | 第一次遇到不是自己代码报的错；同一问题两种修法都失败之后；手写通用功能之前 |
 | ⏱️ [**no-blind-wait**](skills/no-blind-wait/SKILL.md) | 用固定时长的 sleep 等结果 | 准备写 sleep 等某件事完成时 |
 | 📸 [**screenshot-first**](skills/screenshot-first/SKILL.md) | 根据进程名、退出码等间接指标断言状态 | 准备说"已启动 / 已退出 / 已修好"之前 |
 | 🚀 [**think-about-faster-path**](skills/think-about-faster-path/SKILL.md) | 习惯性地用最熟悉、而不是最合适的工具 | 慢操作、批量操作、跨机操作之前 |
@@ -63,6 +64,7 @@ AI 智能体很少因为"不会"而失败，更多是因为**习惯**：
 | 说"已完成 / 已退出 / 已修好" | 📸 screenshot-first |
 | 写 `sleep` 等结果 | ⏱️ no-blind-wait |
 | 说"做不到 / 不值得"，或改用兜底方案 | 🔍 never-give-up-early |
+| 同一个报错准备试第三种修法，或者手写通用功能 | 📚 look-it-up-first |
 | 跑一个慢的、批量的、跨机的操作 | 🚀 think-about-faster-path |
 | 面对"点了没反应 / 卡住了" | 🪟 dialog-handling |
 | 为了找程序失败的原因，又要去读一遍日志 | 📋 look-beyond-the-log |
